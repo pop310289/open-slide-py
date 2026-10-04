@@ -2,7 +2,7 @@
 
 ## 格式
 
-根物件：`schema_version: 1`、`id`、`title`、`width`、`height`、`slides`，可加 `metadata`、`lang`。每頁有唯一的 `id`、`title`、`elements`，可加 `background`、`notes`、`transition`。每個元素包含頁內唯一 `id`、`type`、`x`、`y`、`width`、`height`。
+根物件：`schema_version: 1`、`id`、`title`、`width`、`height`、`slides`，可加 `metadata`（鍵與值都要是字串，結構化資料請先轉成一段文字）、`lang`。每頁有唯一的 `id`、`title`、`elements`，可加 `background`、`notes`、`transition`。每個元素包含頁內唯一 `id`、`type`、`x`、`y`、`width`、`height`。
 
 ```json
 {"schema_version":1,"id":"demo","title":"我的簡報","width":1920,"height":1080,"slides":[{"id":"s1","title":"封面","background":"#142F37","notes":"講者備註","elements":[{"id":"title","type":"text","x":120,"y":250,"width":1680,"height":180,"text":"從設計到落地","font_size":100,"font_family":"Arial","east_asian_font":"PingFang TC","color":"#FFFFFF"}]}]}
