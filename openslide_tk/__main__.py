@@ -1,0 +1,70 @@
+import argparse
+import json
+from pathlib import Path
+import sys
+
+
+def starter_deck():
+    return {"schema_version": 1, "id": "my-deck", "title": "我的簡報", "width": 1920, "height": 1080, "slides": [{"id": "welcome", "title": "開始製作", "background": "#152c36", "notes": "在任何元素上按兩下可編輯。", "elements": [{"id": "title", "type": "text", "x": 130, "y": 220, "width": 1660, "height": 180, "text": "Python + Tcl/Tk", "font_family": "Arial", "font_size": 112, "bold": True, "color": "#ffffff"}, {"id": "body", "type": "text", "x": 140, "y": 470, "width": 1640, "height": 230, "text": "離線簡報、講者備註與可編輯 PowerPoint\n雙擊元素編輯，方向鍵切換投影片", "font_family": "Arial", "font_size": 52, "color": "#97e8c8"}]}]}
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(prog="python -m openslide_tk", description="Open Slide Python + Tcl/Tk native edition")
+    sub = parser.add_subparsers(dest="command", required=True)
+    init = sub.add_parser("init", help="Create a new deck")
+    init.add_argument("output", type=Path)
+    show = sub.add_parser("view", help="Open the Tcl/Tk desktop viewer")
+    show.add_argument("deck", type=Path)
+    show.add_argument("--smoke-test", action="store_true")
+    validate = sub.add_parser("validate", help="Check schema, geometry, assets and text bounds")
+    validate.add_argument("deck", type=Path)
+    export = sub.add_parser("export", help="Export editable PPTX, SVG, or offline HTML")
+    export.add_argument("deck", type=Path)
+    export.add_argument("output", type=Path)
+    export.add_argument("--slide", type=int, default=1, help="1-based slide for SVG")
+    export.add_argument("--interactive", action="store_true", help="Add the native offline player (HTML only)")
+    args = parser.parse_args(argv)
+    try:
+        if args.command == "init":
+            from .storage import save_deck
+            if args.output.exists():
+                parser.error(f"File already exists: {args.output}")
+            save_deck(args.output, starter_deck())
+            print(args.output.resolve())
+        elif args.command == "view":
+            from .viewer import Viewer
+            result = Viewer(args.deck, args.smoke_test).run()
+            if result:
+                print(json.dumps(result, ensure_ascii=False, indent=2))
+        elif args.command == "validate":
+            from .model import load_deck, validate_deck
+            deck = load_deck(args.deck)
+            diagnostics = validate_deck(deck, args.deck.parent)
+            print(json.dumps(diagnostics, ensure_ascii=False, indent=2))
+            return int(any(d["severity"] == "error" for d in diagnostics))
+        elif args.command == "export":
+            from .model import load_deck
+            extension = args.output.suffix.lower()
+            if args.interactive and extension != ".html":
+                parser.error("--interactive requires an .html output")
+            deck = load_deck(args.deck)
+            if extension == ".pptx":
+                from .pptx import export_pptx
+                export_pptx(deck, args.output, args.deck.parent)
+            elif extension == ".html":
+                from .export import export_html
+                export_html(deck, args.output, args.deck.parent, interactive=args.interactive)
+            elif extension == ".svg":
+                from .export import export_svg
+                export_svg(deck, args.slide - 1, args.output, args.deck.parent)
+            else:
+                parser.error("Output extension must be .pptx, .svg, or .html")
+            print(args.output.resolve())
+        return 0
+    except (ValueError, OSError, RuntimeError, KeyError, IndexError) as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "open-slide-py"
+version = "0.1.0"
+description = "Native Python standard-library and Tcl/Tk presentation framework"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+dependencies = []
+
+[project.scripts]
+open-slide-tk = "openslide_tk.__main__:main"
+
+[tool.setuptools]
+packages = ["openslide_tk"]
+
+[tool.setuptools.package-data]
+openslide_tk = ["ui/*.tcl", "web/*.css", "web/*.js"]
