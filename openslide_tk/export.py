@@ -4,10 +4,11 @@ from __future__ import annotations
 import base64
 import hashlib
 from html import escape
+import math
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
-from .model import assert_valid, bilingual_labels, html_language, resolve_image, wrap_text
+from .model import DEFAULT_TEXT_COLOR, GLOW_FIELDS, SHADOW_FIELDS, assert_valid, bilingual_labels, html_language, resolve_image, styled_lines
 from .storage import atomic_write
 from .fonts import document_fonts
 
@@ -40,6 +41,49 @@ def _document_font_stack(deck):
     return _font_stack({"font_family": latin, "east_asian_font": east_asian})
 
 
+def _r(value):
+    return round(value, 6) + 0.0  # no "-0" from tiny negative trigonometry results
+
+
+def _gradient(definitions, gradient_id, gradient):
+    angle = math.radians(gradient.get("angle", 90))
+    dx, dy = math.cos(angle) / 2, math.sin(angle) / 2
+    node = ET.SubElement(definitions, "linearGradient", {"id": gradient_id, "x1": _n(_r(0.5 - dx)), "y1": _n(_r(0.5 - dy)),
+                                                        "x2": _n(_r(0.5 + dx)), "y2": _n(_r(0.5 + dy))})
+    for stop in gradient["stops"]:
+        ET.SubElement(node, "stop", {"offset": _n(stop["at"]), "stop-color": stop["color"], "stop-opacity": _n(stop.get("opacity", 1))})
+    return gradient_id
+
+
+def _effect_filter(definitions, filter_id, element):
+    """SVG counterpart of PPTX glow and outer shadow: a blurred tinted halo under the shape, then a drop shadow."""
+    glow = {**GLOW_FIELDS, **element["glow"]} if element.get("glow") else None
+    shadow = {**SHADOW_FIELDS, **element["shadow"]} if element.get("shadow") else None
+    pad = max(glow["radius"] * 2 if glow else 0, shadow["blur"] * 2 + shadow["distance"] if shadow else 0) + 4
+    node = ET.SubElement(definitions, "filter", {
+        "id": filter_id, "filterUnits": "userSpaceOnUse", "color-interpolation-filters": "sRGB",
+        "x": _n(element["x"] - pad), "y": _n(element["y"] - pad),
+        "width": _n(element["width"] + 2 * pad), "height": _n(element["height"] + 2 * pad)})
+    layers = []
+    if glow:
+        ET.SubElement(node, "feGaussianBlur", {"in": "SourceAlpha", "stdDeviation": _n(glow["radius"] / 2), "result": "halo"})
+        ET.SubElement(node, "feFlood", {"flood-color": glow["color"], "flood-opacity": _n(glow["opacity"])})
+        ET.SubElement(node, "feComposite", {"in2": "halo", "operator": "in", "result": "glow"})
+        layers.append("glow")
+    if shadow:
+        angle = math.radians(shadow["angle"])
+        ET.SubElement(node, "feDropShadow", {
+            "in": "SourceGraphic", "dx": _n(_r(shadow["distance"] * math.cos(angle))), "dy": _n(_r(shadow["distance"] * math.sin(angle))),
+            "stdDeviation": _n(shadow["blur"] / 2), "flood-color": shadow["color"], "flood-opacity": _n(shadow["opacity"]), "result": "shadowed"})
+        layers.append("shadowed")
+    else:
+        layers.append("SourceGraphic")
+    merge = ET.SubElement(node, "feMerge")
+    for layer in layers:
+        ET.SubElement(merge, "feMergeNode", {"in": layer})
+    return filter_id
+
+
 def _svg(deck, slide_index, base_dir, anchor_map=None):
     slide = deck["slides"][slide_index]
     width, height = deck["width"], deck["height"]
@@ -67,6 +111,13 @@ def _svg(deck, slide_index, base_dir, anchor_map=None):
             ET.SubElement(group, "title").text = element["alt"]
         attrs = {"fill": element.get("fill") or "none", "stroke": element.get("stroke") or "none",
                  "stroke-width": _n(element.get("stroke_width", 1))}
+        for key, name in (("fill_opacity", "fill-opacity"), ("stroke_opacity", "stroke-opacity")):
+            if key in element:
+                attrs[name] = _n(element[key])
+        if element.get("gradient"):
+            attrs["fill"] = "url(#" + _gradient(definitions, f"grad-{slide_index}-{index}", element["gradient"]) + ")"
+        if element.get("shadow") or element.get("glow"):
+            attrs["filter"] = "url(#" + _effect_filter(definitions, f"fx-{slide_index}-{index}", element) + ")"
         if kind == "line":
             attrs.update(x1=_n(x), y1=_n(y), x2=_n(x + w), y2=_n(y + h))
             ET.SubElement(group, "line", attrs)
@@ -75,6 +126,8 @@ def _svg(deck, slide_index, base_dir, anchor_map=None):
             ET.SubElement(group, "ellipse", attrs)
         elif kind in ("rect", "text"):
             attrs.update(x=_n(x), y=_n(y), width=_n(w), height=_n(h))
+            if element.get("radius"):
+                attrs["rx"] = attrs["ry"] = _n(min(element["radius"], w / 2, h / 2))
             ET.SubElement(group, "rect", attrs)
             if kind == "text":
                 clip_id = f"clip-{slide_index}-{index}"
@@ -89,14 +142,27 @@ def _svg(deck, slide_index, base_dir, anchor_map=None):
                     "text-anchor": {"left": "start", "center": "middle", "right": "end"}[align],
                     "clip-path": f"url(#{clip_id})", "{http://www.w3.org/XML/1998/namespace}space": "preserve",
                 })
-                for li, line in enumerate(wrap_text(element["text"], w, font_size)):
-                    ET.SubElement(text, "tspan", {"x": _n(anchor_x), "y": _n(y + font_size * (0.85 + li * 1.2))}).text = line
+                base = (element.get("color", DEFAULT_TEXT_COLOR), element.get("bold", False))
+                for li, runs in enumerate(styled_lines(element)):
+                    line = ET.SubElement(text, "tspan", {"x": _n(anchor_x), "y": _n(y + font_size * (0.85 + li * 1.2))})
+                    if len(runs) == 1 and runs[0][1:] == base:
+                        line.text = runs[0][0]
+                        continue
+                    for part, color, bold in runs:
+                        run = {}
+                        if color != base[0]:
+                            run["fill"] = color
+                        if bold != base[1]:
+                            run["font-weight"] = "700" if bold else "400"
+                        ET.SubElement(line, "tspan", run).text = part
         elif kind == "image":
             _, mime, data = resolve_image(element["path"], base_dir)
-            ET.SubElement(group, "image", {
-                "x": _n(x), "y": _n(y), "width": _n(w), "height": _n(h), "preserveAspectRatio": "none",
-                "href": f"data:{mime};base64,{base64.b64encode(data).decode('ascii')}",
-            })
+            effect = attrs.pop("filter", None)
+            image = {"x": _n(x), "y": _n(y), "width": _n(w), "height": _n(h), "preserveAspectRatio": "none",
+                     "href": f"data:{mime};base64,{base64.b64encode(data).decode('ascii')}"}
+            if effect:
+                image["filter"] = effect
+            ET.SubElement(group, "image", image)
             if element.get("stroke"):
                 attrs.update(x=_n(x), y=_n(y), width=_n(w), height=_n(h), fill="none")
                 ET.SubElement(group, "rect", attrs)

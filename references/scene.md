@@ -19,6 +19,19 @@
 
 `href` 可使用 HTTP(S)、mailto 或 `#slide-id`。`step` 是正整數，同值一起揭露；`transition` 為 `none` 或 `fade`。網頁互動版按實際存在的 step 排序、進入新頁時由零開始，後退至上頁時顯示完整內容。「完整顯示」可暫停逐步模式。PPTX/SVG/靜態 HTML、列印和停用 JavaScript 時均顯示全部元素。
 
+## 樣式（卡片與強調）
+
+| 欄位 | 適用 | 說明 |
+|---|---|---|
+| `radius` | rect、text | 圓角半徑（像素），最多為短邊的一半 |
+| `fill_opacity`、`stroke_opacity` | 有底色或邊框的元素 | 底色與邊框各自的不透明度（0–1），再乘上 `opacity` |
+| `gradient` | rect、ellipse、text | 線性漸層，取代 `fill`：`{"angle": 135, "stops": [{"color": "#FFFFFF", "opacity": 0.12, "at": 0}, {"color": "#FFFFFF", "opacity": 0.02, "at": 1}]}`。`angle` 0 由左到右、90 由上到下；2–8 個色標，`at` 0–1 不可遞減，`opacity` 預設 1 |
+| `shadow` | rect、ellipse、image | 外陰影：`color`（預設 `#000000`）、`opacity`（0.35）、`blur`（24）、`distance`（8）、`angle`（90，向下） |
+| `glow` | rect、ellipse、image | 光暈：`color`（必填）、`opacity`（0.4）、`radius`（16） |
+| `highlights` | text | 把文字裡的片語換色或加粗：`[{"text": "承認不確定", "color": "#FF7A3D"}, {"text": "4 倍", "bold": true}]`。片語必須出現在 `text` 裡，每次出現都會套用，重疊時後面的優先 |
+
+PPTX 全部用原生格式（圓角矩形、漸層填色、光暈與外陰影、同一段落的多個文字片段），仍可編輯；HTML/SVG 用 `rx`、`linearGradient`、SVG 濾鏡與巢狀 `tspan`。PowerPoint 沒有背景模糊，所以做不出毛玻璃的模糊；深色背景上用半透明底色、細邊框與光暈就能表現玻璃卡片。光暈與陰影不能用在文字元素；要讓文字區塊浮起來，在文字下方放一個 rect。
+
 ## 語言
 
 `lang` 是選填的語言標記，例如 `en-US`、`zh-TW`（字母與連字號，最長 35 字元）。它決定 PPTX 文字與講者備註的校對語言、HTML 的 `lang` 屬性；不是中文（不以 `zh` 開頭）時，靜態 HTML 的外框文字只用英文。未設定時沿用 `zh-TW`（PPTX）、`zh-Hant`（HTML）與中英並列的外框文字。互動播放器的操作介面目前只有中文，`lang` 只改它的 `lang` 屬性。`metadata` 裡的語言欄位不會被讀取。

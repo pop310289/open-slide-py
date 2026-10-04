@@ -20,7 +20,14 @@ SLIDE_FIELDS = {"id", "title", "background", "notes", "elements", "transition"}
 ELEMENT_FIELDS = {
     "id", "type", "x", "y", "width", "height", "fill", "stroke", "stroke_width",
     "opacity", "text", "font_family", "east_asian_font", "font_size", "bold", "align", "color", "path", "alt", "href", "step",
+    "radius", "fill_opacity", "stroke_opacity", "gradient", "shadow", "glow", "highlights",
 }
+DEFAULT_TEXT_COLOR = "#172F39"
+# Optional styles: which element types accept them, and the fields allowed inside the style objects.
+STYLE_TYPES = {"radius": {"rect", "text"}, "gradient": {"rect", "ellipse", "text"}, "shadow": {"rect", "ellipse", "image"},
+               "glow": {"rect", "ellipse", "image"}, "highlights": {"text"}}
+SHADOW_FIELDS = {"color": "#000000", "opacity": 0.35, "blur": 24, "distance": 8, "angle": 90}
+GLOW_FIELDS = {"color": None, "opacity": 0.4, "radius": 16}
 ELEMENT_TYPES = {"text", "rect", "ellipse", "line", "image"}
 
 
@@ -182,8 +189,12 @@ def text_width(text, font_size):
     return units * font_size
 
 
+# Closing punctuation must not begin a line; the word (or CJK character) before it moves down with it.
+NO_LINE_START = frozenset(".,;:!?%)]}»…’”、。，．；：！？％）］｝」』〕〉》】〗〙〛")
+
+
 def wrap_text(text, width, font_size):
-    """Stable linear-time wrapping; explicit line breaks are preserved."""
+    """Stable linear-time wrapping; explicit line breaks are preserved and closing punctuation never starts a line."""
     lines = []
     for paragraph in text.replace("\r\n", "\n").replace("\r", "\n").split("\n"):
         if not paragraph:
@@ -194,9 +205,22 @@ def wrap_text(text, width, font_size):
         for token in re.findall(r"[^\S\n]+|[^\W\s]+|[^\w\s]", paragraph, re.UNICODE):
             token_width = text_width(token, font_size)
             if current and current_width + token_width > width:
+                carry = []
+                if token in NO_LINE_START and not current[-1].isspace():
+                    start = len(current)
+                    while start > 0 and not current[start - 1].isspace():
+                        start -= 1
+                    if start == 0:  # one word or CJK run: move its last character, with any closing punctuation after it
+                        start = len(current) - 1
+                        while start > 0 and current[start] in NO_LINE_START:
+                            start -= 1
+                    carry = current[start:]
+                    if not "".join(current[:start]).strip():
+                        carry = []  # nothing would be left on this line: keep the old break
+                    current = current[:len(current) - len(carry)]
                 lines.append("".join(current).rstrip())
-                current = []
-                current_width = 0.0
+                current = carry
+                current_width = text_width("".join(carry), font_size)
                 if token.isspace():
                     continue
             for char in token:
@@ -209,6 +233,42 @@ def wrap_text(text, width, font_size):
                 current_width += char_width
         lines.append("".join(current).rstrip())
     return lines
+
+
+def styled_lines(element):
+    """wrap_text lines of a text element, each as [(text, color, bold)] runs with its highlights applied.
+
+    Every highlight marks all occurrences of its text; a later highlight wins where two overlap.
+    """
+    text = element["text"].replace("\r\n", "\n").replace("\r", "\n")
+    base = (element.get("color", DEFAULT_TEXT_COLOR), element.get("bold", False))
+    styles = [base] * len(text)
+    for mark in element.get("highlights", []):
+        style = (mark.get("color", base[0]), mark.get("bold", base[1]))
+        start = text.find(mark["text"])
+        while start != -1:
+            styles[start:start + len(mark["text"])] = [style] * len(mark["text"])
+            start = text.find(mark["text"], start + len(mark["text"]))
+    out, pos = [], 0
+    for line in wrap_text(text, element["width"], element.get("font_size", 48)):
+        if not line:
+            out.append([("", *base)])
+            continue
+        # wrap_text only drops whitespace between lines, so each line is the next slice after skipping it.
+        while pos < len(text) and not text.startswith(line, pos) and text[pos].isspace():
+            pos += 1
+        if not text.startswith(line, pos):
+            raise ValueError("Internal error: wrapped line does not match the source text")
+        runs = []
+        for offset, char in enumerate(line):
+            style = styles[pos + offset]
+            if runs and runs[-1][1:] == style:
+                runs[-1] = (runs[-1][0] + char, *style)
+            else:
+                runs.append((char, *style))
+        out.append(runs)
+        pos += len(line)
+    return out
 
 
 def pptx_language(deck) -> str:
@@ -256,6 +316,64 @@ def validate_deck(deck, base_dir=None) -> list[dict]:
             return
         if not isinstance(value, str) or not COLOR_RE.fullmatch(value):
             add("invalid_color", path, "Expected a six-digit color such as #123ABC" + (" or null" if nullable else ""))
+
+    def number(value, path, low, high):
+        if not _number(value) or not low <= value <= high:
+            add("numeric_range", path, f"Expected a finite number from {low} to {high}")
+
+    def gradient(value, path):
+        if not isinstance(value, dict) or set(value) - {"angle", "stops"}:
+            add("invalid_gradient", path, "Gradient must be an object with angle and stops")
+            return
+        number(value.get("angle", 90), path + ".angle", 0, 360)
+        stops = value.get("stops")
+        if not isinstance(stops, list) or not 2 <= len(stops) <= 8:
+            add("invalid_gradient", path + ".stops", "Gradient needs 2 to 8 stops")
+            return
+        previous = 0
+        for i, stop in enumerate(stops):
+            sp = f"{path}.stops[{i}]"
+            if not isinstance(stop, dict) or set(stop) - {"color", "opacity", "at"} or "color" not in stop or "at" not in stop:
+                add("invalid_gradient", sp, "Each stop needs color and at, and may have opacity")
+                continue
+            color(stop["color"], sp + ".color")
+            number(stop.get("opacity", 1), sp + ".opacity", 0, 1)
+            number(stop["at"], sp + ".at", 0, 1)
+            if _number(stop["at"]):
+                if stop["at"] < previous:
+                    add("invalid_gradient", sp + ".at", "Stop positions must not decrease")
+                previous = stop["at"]
+
+    def effect(value, path, allowed):
+        if not isinstance(value, dict) or set(value) - set(allowed):
+            add("invalid_effect", path, "Allowed fields: " + ", ".join(allowed))
+            return
+        if allowed["color"] is None and "color" not in value:
+            add("invalid_effect", path + ".color", "This effect needs a color")
+        if "color" in value:
+            color(value["color"], path + ".color")
+        number(value.get("opacity", 0), path + ".opacity", 0, 1)
+        for key in ("blur", "distance", "radius"):
+            if key in allowed:
+                number(value.get(key, 0), f"{path}.{key}", 0, 500)
+        if "angle" in allowed:
+            number(value.get("angle", 0), path + ".angle", 0, 360)
+
+    def highlights(value, text, path):
+        if not isinstance(value, list) or len(value) > 50:
+            add("invalid_highlight", path, "Highlights must be a list of at most 50 objects")
+            return
+        for i, mark in enumerate(value):
+            hp = f"{path}[{i}]"
+            if not isinstance(mark, dict) or set(mark) - {"text", "color", "bold"} or not ({"color", "bold"} & set(mark)):
+                add("invalid_highlight", hp, "Each highlight needs text and a color or bold")
+                continue
+            if string(mark.get("text"), hp + ".text", True) and isinstance(text, str) and mark["text"] not in text.replace("\r\n", "\n").replace("\r", "\n"):
+                add("invalid_highlight", hp + ".text", "Highlighted text must appear in the element text")
+            if "color" in mark:
+                color(mark["color"], hp + ".color")
+            if "bold" in mark and not isinstance(mark["bold"], bool):
+                add("invalid_boolean", hp + ".bold", "Expected true or false")
 
     if not isinstance(deck, dict):
         add("invalid_deck", "$", "Deck must be a JSON object")
@@ -340,7 +458,8 @@ def validate_deck(deck, base_dir=None) -> list[dict]:
                     color(element[key], ep + "." + key, True)
             if "color" in element:
                 color(element["color"], ep + ".color")
-            for key, low, high, default in (("stroke_width", 0, 1000, 1), ("opacity", 0, 1, 1), ("font_size", 1, 4000, 48)):
+            for key, low, high, default in (("stroke_width", 0, 1000, 1), ("opacity", 0, 1, 1), ("font_size", 1, 4000, 48),
+                                            ("fill_opacity", 0, 1, 1), ("stroke_opacity", 0, 1, 1), ("radius", 0, 100000, 0)):
                 val = element.get(key, default)
                 if not _number(val) or not low <= val <= high:
                     add("numeric_range", ep + "." + key, f"Expected a finite number from {low} to {high}")
@@ -350,6 +469,17 @@ def validate_deck(deck, base_dir=None) -> list[dict]:
                     if valid_string and key in ("font_family", "east_asian_font"):
                         if len(element[key]) > 128 or any(c in element[key] for c in ",\r\n\t"):
                             add("font_name", ep + "." + key, "Expected one font family name, at most 128 characters; CSS fallback lists are not supported")
+            for key, kinds in STYLE_TYPES.items():
+                if key in element and kind not in kinds:
+                    add("unsupported_style", ep + "." + key, f"{key} applies only to {', '.join(sorted(kinds))} elements")
+            if "gradient" in element:
+                gradient(element["gradient"], ep + ".gradient")
+            if "shadow" in element:
+                effect(element["shadow"], ep + ".shadow", SHADOW_FIELDS)
+            if "glow" in element:
+                effect(element["glow"], ep + ".glow", GLOW_FIELDS)
+            if "highlights" in element and kind == "text":
+                highlights(element["highlights"], element.get("text"), ep + ".highlights")
             if "bold" in element and not isinstance(element["bold"], bool):
                 add("invalid_boolean", ep + ".bold", "Expected true or false")
             if element.get("align", "left") not in ("left", "center", "right"):

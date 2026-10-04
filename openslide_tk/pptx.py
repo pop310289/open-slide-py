@@ -12,7 +12,7 @@ from xml.sax.saxutils import escape
 import zipfile
 
 from .export import write_atomic
-from .model import assert_valid, pptx_language, resolve_image, wrap_text
+from .model import DEFAULT_TEXT_COLOR, GLOW_FIELDS, SHADOW_FIELDS, assert_valid, pptx_language, resolve_image, styled_lines
 from .fonts import document_fonts, element_fonts
 
 NS_A = "http://schemas.openxmlformats.org/drawingml/2006/main"
@@ -42,8 +42,39 @@ def _fill(color, opacity=1):
     return f'<a:solidFill><a:srgbClr val="{color[1:].upper()}">{alpha}</a:srgbClr></a:solidFill>'
 
 
+def _alpha(value):
+    return f'<a:alpha val="{round(value * 100000)}"/>' if value < 1 else ""
+
+
+def _degrees(value):
+    return round(value * 60000) % 21600000
+
+
+def _shape_fill(element):
+    opacity = element.get("opacity", 1)
+    gradient = element.get("gradient")
+    if not gradient:
+        return _fill(element.get("fill"), opacity * element.get("fill_opacity", 1))
+    stops = "".join(f'<a:gs pos="{round(stop["at"] * 100000)}"><a:srgbClr val="{stop["color"][1:].upper()}">'
+                    f'{_alpha(stop.get("opacity", 1) * opacity)}</a:srgbClr></a:gs>' for stop in gradient["stops"])
+    return f'<a:gradFill rotWithShape="1"><a:gsLst>{stops}</a:gsLst><a:lin ang="{_degrees(gradient.get("angle", 90))}" scaled="0"/></a:gradFill>'
+
+
+def _effects(element):
+    parts = []
+    if element.get("glow"):
+        glow = {**GLOW_FIELDS, **element["glow"]}
+        parts.append(f'<a:glow rad="{_emu(glow["radius"])}"><a:srgbClr val="{glow["color"][1:].upper()}">{_alpha(glow["opacity"])}</a:srgbClr></a:glow>')
+    if element.get("shadow"):
+        shadow = {**SHADOW_FIELDS, **element["shadow"]}
+        parts.append(f'<a:outerShdw blurRad="{_emu(shadow["blur"])}" dist="{_emu(shadow["distance"])}" dir="{_degrees(shadow["angle"])}" algn="ctr" '
+                     f'rotWithShape="0"><a:srgbClr val="{shadow["color"][1:].upper()}">{_alpha(shadow["opacity"])}</a:srgbClr></a:outerShdw>')
+    return f'<a:effectLst>{"".join(parts)}</a:effectLst>' if parts else ""
+
+
 def _outline(element):
-    return f'<a:ln w="{_emu(element.get("stroke_width", 1))}">{_fill(element.get("stroke"), element.get("opacity", 1))}<a:prstDash val="solid"/></a:ln>'
+    opacity = element.get("opacity", 1) * element.get("stroke_opacity", 1)
+    return f'<a:ln w="{_emu(element.get("stroke_width", 1))}">{_fill(element.get("stroke"), opacity)}<a:prstDash val="solid"/></a:ln>'
 
 
 def _transform(element):
@@ -61,15 +92,24 @@ def _rels(entries):
 def _text_body(element, lang):
     size = element.get("font_size", 48)
     font, east_asian_font = map(_e, element_fonts(element))
-    bold = ' b="1"' if element.get("bold", False) else ' b="0"'
     font_xml = f'<a:latin typeface="{font}"/><a:ea typeface="{east_asian_font}"/><a:cs typeface="{font}"/>'
-    run_attrs = f'lang="{_e(lang)}" sz="{round(size * 50)}"{bold} dirty="0"'
-    style = _fill(element.get("color", "#172F39"), element.get("opacity", 1)) + font_xml
+    opacity = element.get("opacity", 1)
+
+    def attrs(bold):
+        flag = ' b="1"' if bold else ' b="0"'
+        return f'lang="{_e(lang)}" sz="{round(size * 50)}"{flag} dirty="0"'
+
+    def style(color):
+        return _fill(color, opacity) + font_xml
+
+    base_color, base_bold = element.get("color", DEFAULT_TEXT_COLOR), element.get("bold", False)
     paragraphs = []
-    for line in wrap_text(element["text"], element["width"], size):
+    for runs in styled_lines(element):
         alignment = {"left": "l", "center": "ctr", "right": "r"}[element.get("align", "left")]
         properties = f'<a:pPr algn="{alignment}" marL="0" marR="0" indent="0"><a:lnSpc><a:spcPts val="{round(size * 60)}"/></a:lnSpc><a:spcBef><a:spcPts val="0"/></a:spcBef><a:spcAft><a:spcPts val="0"/></a:spcAft><a:buNone/></a:pPr>'
-        paragraphs.append(f'<a:p>{properties}<a:r><a:rPr {run_attrs}>{style}</a:rPr><a:t xml:space="preserve">{_e(line)}</a:t></a:r><a:endParaRPr {run_attrs}>{style}</a:endParaRPr></a:p>')
+        text_runs = "".join(f'<a:r><a:rPr {attrs(bold)}>{style(color)}</a:rPr><a:t xml:space="preserve">{_e(part)}</a:t></a:r>'
+                            for part, color, bold in runs)
+        paragraphs.append(f'<a:p>{properties}{text_runs}<a:endParaRPr {attrs(base_bold)}>{style(base_color)}</a:endParaRPr></a:p>')
     return '<p:txBody><a:bodyPr wrap="none" lIns="0" tIns="0" rIns="0" bIns="0" anchor="t"><a:noAutofit/></a:bodyPr><a:lstStyle/>' + ''.join(paragraphs) + '</p:txBody>'
 
 
@@ -77,14 +117,19 @@ def _shape(element, shape_id, hyperlink="", image_rid=None, lang="zh-TW"):
     kind = element["type"]
     properties = f'<p:cNvPr id="{shape_id}" name="{_e(element["id"])}" descr="{_e(element.get("alt", ""))}">{hyperlink}</p:cNvPr>'
     geometry = {"text": "rect", "rect": "rect", "ellipse": "ellipse", "line": "line", "image": "rect"}[kind]
-    geometric = _transform(element) + f'<a:prstGeom prst="{geometry}"><a:avLst/></a:prstGeom>'
+    radius = element.get("radius", 0) if kind in ("rect", "text") else 0
+    if radius:
+        adjust = min(50000, round(radius / max(min(element["width"], element["height"]), 1e-9) * 100000))
+        geometric = _transform(element) + f'<a:prstGeom prst="roundRect"><a:avLst><a:gd name="adj" fmla="val {adjust}"/></a:avLst></a:prstGeom>'
+    else:
+        geometric = _transform(element) + f'<a:prstGeom prst="{geometry}"><a:avLst/></a:prstGeom>'
     if kind == "image":
         opacity = element.get("opacity", 1)
         alpha = f'<a:alphaModFix amt="{round(opacity * 100000)}"/>' if opacity < 1 else ""
-        return f'<p:pic><p:nvPicPr>{properties}<p:cNvPicPr><a:picLocks noChangeAspect="1"/></p:cNvPicPr><p:nvPr/></p:nvPicPr><p:blipFill><a:blip r:embed="{image_rid}">{alpha}</a:blip><a:stretch><a:fillRect/></a:stretch></p:blipFill><p:spPr>{geometric}{_outline(element)}</p:spPr></p:pic>'
+        return f'<p:pic><p:nvPicPr>{properties}<p:cNvPicPr><a:picLocks noChangeAspect="1"/></p:cNvPicPr><p:nvPr/></p:nvPicPr><p:blipFill><a:blip r:embed="{image_rid}">{alpha}</a:blip><a:stretch><a:fillRect/></a:stretch></p:blipFill><p:spPr>{geometric}{_outline(element)}{_effects(element)}</p:spPr></p:pic>'
     txbox = ' txBox="1"' if kind == "text" else ""
     body = _text_body(element, lang) if kind == "text" else ""
-    return f'<p:sp><p:nvSpPr>{properties}<p:cNvSpPr{txbox}/><p:nvPr/></p:nvSpPr><p:spPr>{geometric}{_fill(element.get("fill"), element.get("opacity", 1))}{_outline(element)}</p:spPr>{body}</p:sp>'
+    return f'<p:sp><p:nvSpPr>{properties}<p:cNvSpPr{txbox}/><p:nvPr/></p:nvSpPr><p:spPr>{geometric}{_shape_fill(element)}{_outline(element)}{_effects(element)}</p:spPr>{body}</p:sp>'
 
 
 def _theme(font_pair):

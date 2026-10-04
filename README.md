@@ -8,6 +8,7 @@ A Python standard-library port of [open-slide](https://github.com/open-slide/ope
 
 - **No dependencies.** Everything uses only the Python 3.10+ standard library. There is no visual editor: you edit the JSON scene, or let an agent edit it.
 - **Editable PPTX.** Text, rectangles, ellipses, lines and images become native PowerPoint objects, and speaker notes are kept.
+- **Cards and emphasis.** Rounded corners, separate fill and stroke opacity, gradients, glow, shadow and highlighted words are native PowerPoint styles, so cards and emphasis stay editable.
 - **Two HTML outputs.** The default HTML is static and contains no JavaScript. `--interactive` adds an offline player with keyboard and touch navigation, step-by-step reveal, a slide index, speaker notes and a timer; its inline CSS and JavaScript are pinned by a Content-Security-Policy hash.
 - **Validation before export.** Schema, geometry, image assets and an estimate of text overflow are checked. An invalid deck never overwrites an existing output file.
 - **Reproducible output.** Exporting the same scene twice gives byte-identical PPTX files.
@@ -46,7 +47,7 @@ python3 -S -m openslide_tk export /path/to/deck.json /path/to/slide-1.svg --slid
 - Coordinates and font sizes are in canvas pixels. In PPTX one pixel is 0.5 pt, so a 1920×1080 canvas becomes a 13.33×7.5 in slide.
 - Set a top-level `lang` (for example `en-US`) for decks that are not in Chinese. It sets the PowerPoint proofing language and the HTML `lang`, and switches the static HTML labels to English. Decks without `lang` keep the original Traditional Chinese defaults (`zh-TW` in PPTX, `zh-Hant` in HTML).
 
-The full reference is [references/scene.md](references/scene.md). The detailed documentation (`SKILL.md` and `references/`) is written in Traditional Chinese.
+Style fields (`radius`, `fill_opacity`, `stroke_opacity`, `gradient`, `shadow`, `glow` and `highlights` for words inside a text box) are described in [references/scene.md](references/scene.md), which is the full reference. The detailed documentation (`SKILL.md` and `references/`) is written in Traditional Chinese.
 
 ## Use as an agent skill
 
@@ -62,7 +63,7 @@ In a comparison on a five-slide English deck (one run each, October 2026), Claud
 
 ## Quality
 
-The maintainers run 61 tests (macOS, Python 3.14 and 3.9) and an export check of exactly the files in this repository before each update. The tests are not included here; this repository contains only what you need to make slides.
+The maintainers run 73 tests (macOS, Python 3.14 and 3.9) and an export check of exactly the files in this repository before each update. The tests are not included here; this repository contains only what you need to make slides.
 
 ## Known limitations
 
@@ -72,6 +73,7 @@ The maintainers run 61 tests (macOS, Python 3.14 and 3.9) and an export check of
 - PPTX text is broken into lines in advance (one paragraph per line, no automatic wrapping), so every renderer breaks lines in the same place, but PowerPoint does not reflow the text when you edit it.
 - A `line` runs from the top-left to the bottom-right corner of its box; the other diagonal cannot be drawn.
 - `validate` estimates text overflow but does not detect overlapping text boxes.
+- PowerPoint has no background blur, so frosted glass is approximated with translucent fills, thin borders and glow.
 - There is no PPTX import, video, Morph transition or native PDF writer. To get a PDF, print the HTML.
 
 ## Origin and license
