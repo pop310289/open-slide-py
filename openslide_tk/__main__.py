@@ -5,17 +5,14 @@ import sys
 
 
 def starter_deck():
-    return {"schema_version": 1, "id": "my-deck", "title": "我的簡報", "width": 1920, "height": 1080, "slides": [{"id": "welcome", "title": "開始製作", "background": "#152c36", "notes": "在任何元素上按兩下可編輯。", "elements": [{"id": "title", "type": "text", "x": 130, "y": 220, "width": 1660, "height": 180, "text": "Python + Tcl/Tk", "font_family": "Arial", "font_size": 112, "bold": True, "color": "#ffffff"}, {"id": "body", "type": "text", "x": 140, "y": 470, "width": 1640, "height": 230, "text": "離線簡報、講者備註與可編輯 PowerPoint\n雙擊元素編輯，方向鍵切換投影片", "font_family": "Arial", "font_size": 52, "color": "#97e8c8"}]}]}
+    return {"schema_version": 1, "id": "my-deck", "title": "我的簡報", "width": 1920, "height": 1080, "slides": [{"id": "welcome", "title": "開始製作", "background": "#152c36", "notes": "修改這份 JSON 後，用 validate 檢查、用 export 匯出。", "elements": [{"id": "title", "type": "text", "x": 130, "y": 220, "width": 1660, "height": 180, "text": "open-slide-py", "font_family": "Arial", "font_size": 112, "bold": True, "color": "#ffffff"}, {"id": "body", "type": "text", "x": 140, "y": 470, "width": 1640, "height": 230, "text": "離線簡報、講者備註與可編輯 PowerPoint\n修改這份 JSON，再用 validate 檢查、export 匯出", "font_family": "Arial", "font_size": 52, "color": "#97e8c8"}]}]}
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(prog="python -m openslide_tk", description="Open Slide Python + Tcl/Tk native edition")
+    parser = argparse.ArgumentParser(prog="python -m openslide_tk", description="open-slide-py: JSON slide scenes to editable PPTX, SVG and offline HTML")
     sub = parser.add_subparsers(dest="command", required=True)
     init = sub.add_parser("init", help="Create a new deck")
     init.add_argument("output", type=Path)
-    show = sub.add_parser("view", help="Open the Tcl/Tk desktop viewer")
-    show.add_argument("deck", type=Path)
-    show.add_argument("--smoke-test", action="store_true")
     validate = sub.add_parser("validate", help="Check schema, geometry, assets and text bounds")
     validate.add_argument("deck", type=Path)
     export = sub.add_parser("export", help="Export editable PPTX, SVG, or offline HTML")
@@ -31,11 +28,6 @@ def main(argv=None):
                 parser.error(f"File already exists: {args.output}")
             save_deck(args.output, starter_deck())
             print(args.output.resolve())
-        elif args.command == "view":
-            from .viewer import Viewer
-            result = Viewer(args.deck, args.smoke_test).run()
-            if result:
-                print(json.dumps(result, ensure_ascii=False, indent=2))
         elif args.command == "validate":
             from .model import read_deck, validate_deck
             # Report every error and warning as JSON; load_deck would stop at the first invalid scene.

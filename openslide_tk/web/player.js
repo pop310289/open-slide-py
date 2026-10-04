@@ -1,4 +1,4 @@
-/* OpenSlide native player. No network requests, dynamic HTML, or dependencies. */
+/* open-slide-py native player. No network requests, dynamic HTML, or dependencies. */
 "use strict";
 
 class OpenSlidePlayback {

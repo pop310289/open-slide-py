@@ -162,11 +162,11 @@ def _player_html(deck, base_dir):
 <html lang="{escape(html_language(deck), quote=True)}"><head><meta charset="utf-8">
 <meta http-equiv="Content-Security-Policy" content="{escape(policy, quote=True)}">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="generator" content="OpenSlide Tk native offline player">
+<meta name="generator" content="open-slide-py offline player">
 <title>{title}</title><style>{stylesheet}</style></head>
 <body class="os-player">
 <a class="os-skip" href="#os-stage">跳至投影片</a>
-<header class="os-top"><div class="os-heading"><span class="os-brand">OPENSLIDE</span><h1>{title}</h1></div>
+<header class="os-top"><div class="os-heading"><span class="os-brand">open-slide-py</span><h1>{title}</h1></div>
 <div class="os-top-actions" data-os-controls hidden><button type="button" id="os-catalog" aria-haspopup="dialog">目錄</button><button type="button" id="os-tools" aria-haspopup="dialog">工具</button></div></header>
 <main id="os-stage" tabindex="-1">{''.join(sections)}</main>
 <footer class="os-controls" data-os-controls hidden>
@@ -210,7 +210,7 @@ def export_html(deck, output_path, base_dir=None, *, interactive=False) -> Path:
     html = f'''<!doctype html>
 <html lang="{escape(html_language(deck), quote=True)}"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="generator" content="OpenSlide Tk (Python standard library)">
+<meta name="generator" content="open-slide-py (Python standard library)">
 <title>{title}</title><style>
 * {{ box-sizing: border-box; }}
 html {{ scroll-behavior: smooth; scroll-snap-type: y proximity; }}

@@ -1,12 +1,12 @@
 # open-slide-py
 
-A Python standard-library and Tcl/Tk port of [open-slide](https://github.com/open-slide/open-slide). Write a slide deck as a JSON scene, then export it as an editable PowerPoint file (PPTX), SVG, a static HTML reading version or an offline interactive player. The repository is also an agent skill (`SKILL.md`) for Claude Code, Codex and OpenCode.
+A Python standard-library port of [open-slide](https://github.com/open-slide/open-slide). Write a slide deck as a JSON scene, then export it as an editable PowerPoint file (PPTX), SVG, a static HTML reading version or an offline interactive player. The repository is also an agent skill (`SKILL.md`) for Claude Code, Codex and OpenCode.
 
 > **Status: preview (0.1.0).** This is an unofficial port. It is not affiliated with the open-slide project, and it is unrelated to the OpenSlide whole-slide imaging library.
 
 ## Features
 
-- **No dependencies.** Validation and export use only the Python 3.10+ standard library. The desktop editor additionally needs Tcl/Tk 8.6+ (`wish`). macOS ships Tcl/Tk 8.5 in `/usr/bin`, which is too old and is skipped automatically; install a newer one (for example `brew install tcl-tk`) or point `OPENSLIDE_WISH` at a `wish` 8.6+.
+- **No dependencies.** Everything uses only the Python 3.10+ standard library. There is no visual editor: you edit the JSON scene, or let an agent edit it.
 - **Editable PPTX.** Text, rectangles, ellipses, lines and images become native PowerPoint objects, and speaker notes are kept.
 - **Two HTML outputs.** The default HTML is static and contains no JavaScript. `--interactive` adds an offline player with keyboard and touch navigation, step-by-step reveal, a slide index, speaker notes and a timer; its inline CSS and JavaScript are pinned by a Content-Security-Policy hash.
 - **Validation before export.** Schema, geometry, image assets and an estimate of text overflow are checked. An invalid deck never overwrites an existing output file.
@@ -25,7 +25,6 @@ python3 -S -m openslide_tk export /path/to/deck.json /path/to/deck.pptx
 python3 -S -m openslide_tk export /path/to/deck.json /path/to/deck.html
 python3 -S -m openslide_tk export /path/to/deck.json /path/to/player.html --interactive
 python3 -S -m openslide_tk export /path/to/deck.json /path/to/slide-1.svg --slide 1
-python3 -m openslide_tk view /path/to/deck.json   # Tk desktop editor
 ```
 
 ## Scene format
@@ -61,20 +60,15 @@ Clone or link the repository into a folder named `open-slide-py`, so that the fo
 
 In a comparison on a five-slide English deck (one run each, October 2026), Claude Code and Codex both produced complete decks with this skill. A small local model (Qwen3 8B in OpenCode) did not.
 
-## Tests
+## Quality
 
-```sh
-python3 -S -m unittest discover -s tests
-python3 scripts/verify_skill.py --output /tmp/open-slide-py-verification.json
-```
-
-Some tests are skipped when their tools are missing: four open real Tk windows and run only with `OPENSLIDE_GUI_TEST=1` (`verify_skill.py --gui` sets it), the Tcl bridge tests need Tcl 8.6+, and two optional tests check the player's JavaScript with Node.js. `verify_skill.py` runs the tests, exports all four formats with `python3 -S` and checks the slide text, the notes and repeated exports.
+The maintainers run 61 tests (macOS, Python 3.14 and 3.9) and an export check of exactly the files in this repository before each update. The tests are not included here; this repository contains only what you need to make slides.
 
 ## Known limitations
 
 - Opening, editing and re-saving the PPTX in PowerPoint or Keynote has not been verified, and neither has Windows font substitution.
 - Fonts are declared, not embedded, so the device that opens the file decides the actual glyphs.
-- The interactive player's controls, the desktop editor and the `init` sample deck are in Traditional Chinese.
+- The interactive player's controls and the `init` sample deck are in Traditional Chinese.
 - PPTX text is broken into lines in advance (one paragraph per line, no automatic wrapping), so every renderer breaks lines in the same place, but PowerPoint does not reflow the text when you edit it.
 - A `line` runs from the top-left to the bottom-right corner of its box; the other diagonal cannot be drawn.
 - `validate` estimates text overflow but does not detect overlapping text boxes.

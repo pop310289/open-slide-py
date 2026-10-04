@@ -98,7 +98,7 @@ def _theme(font_pair):
     fonts = ''.join(f'<a:{name}><a:latin typeface="{latin}"/><a:ea typeface="{east_asian}"/><a:cs typeface="{latin}"/><a:font script="Hant" typeface="{hant}"/></a:{name}>' for name in ("majorFont", "minorFont"))
     fill = '<a:solidFill><a:schemeClr val="phClr"/></a:solidFill>'
     lines = ''.join(f'<a:ln w="{width}" cap="flat" cmpd="sng" algn="ctr">{fill}<a:prstDash val="solid"/><a:miter lim="800000"/></a:ln>' for width in (6350, 12700, 19050))
-    return DECL + f'<a:theme xmlns:a="{NS_A}" name="OpenSlide Tk"><a:themeElements><a:clrScheme name="OpenSlide Tk">{clr}</a:clrScheme><a:fontScheme name="{latin}">{fonts}</a:fontScheme><a:fmtScheme name="OpenSlide Tk"><a:fillStyleLst>{fill * 3}</a:fillStyleLst><a:lnStyleLst>{lines}</a:lnStyleLst><a:effectStyleLst>{"<a:effectStyle><a:effectLst/></a:effectStyle>" * 3}</a:effectStyleLst><a:bgFillStyleLst>{fill * 3}</a:bgFillStyleLst></a:fmtScheme></a:themeElements><a:objectDefaults/><a:extraClrSchemeLst/></a:theme>'
+    return DECL + f'<a:theme xmlns:a="{NS_A}" name="open-slide-py"><a:themeElements><a:clrScheme name="open-slide-py">{clr}</a:clrScheme><a:fontScheme name="{latin}">{fonts}</a:fontScheme><a:fmtScheme name="open-slide-py"><a:fillStyleLst>{fill * 3}</a:fillStyleLst><a:lnStyleLst>{lines}</a:lnStyleLst><a:effectStyleLst>{"<a:effectStyle><a:effectLst/></a:effectStyle>" * 3}</a:effectStyleLst><a:bgFillStyleLst>{fill * 3}</a:bgFillStyleLst></a:fmtScheme></a:themeElements><a:objectDefaults/><a:extraClrSchemeLst/></a:theme>'
 
 
 def _notes_master():
@@ -138,11 +138,11 @@ def build_pptx_parts(deck, base_dir=None):
                  ("rId2", "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties", "docProps/core.xml", False),
                  ("rId3", "extended-properties", "docProps/app.xml", False)]
     add("_rels/.rels", _rels(root_rels))
-    creator = deck.get("metadata", {}).get("author", "OpenSlide Tk")
+    creator = deck.get("metadata", {}).get("author", "open-slide-py")
     description = deck.get("metadata", {}).get("description", "")
-    core = f'<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:title>{_e(deck["title"])}</dc:title><dc:creator>{_e(creator)}</dc:creator><dc:description>{_e(description)}</dc:description><cp:lastModifiedBy>OpenSlide Tk</cp:lastModifiedBy><cp:revision>1</cp:revision><dcterms:created xsi:type="dcterms:W3CDTF">2000-01-01T00:00:00Z</dcterms:created><dcterms:modified xsi:type="dcterms:W3CDTF">2000-01-01T00:00:00Z</dcterms:modified></cp:coreProperties>'
+    core = f'<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:title>{_e(deck["title"])}</dc:title><dc:creator>{_e(creator)}</dc:creator><dc:description>{_e(description)}</dc:description><cp:lastModifiedBy>open-slide-py</cp:lastModifiedBy><cp:revision>1</cp:revision><dcterms:created xsi:type="dcterms:W3CDTF">2000-01-01T00:00:00Z</dcterms:created><dcterms:modified xsi:type="dcterms:W3CDTF">2000-01-01T00:00:00Z</dcterms:modified></cp:coreProperties>'
     add("docProps/core.xml", DECL + core, "application/vnd.openxmlformats-package.core-properties+xml")
-    app = f'<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties" xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"><Application>OpenSlide Tk</Application><PresentationFormat>Custom</PresentationFormat><Slides>{len(slides)}</Slides><Notes>{sum(bool(s.get("notes")) for s in slides)}</Notes><HiddenSlides>0</HiddenSlides><AppVersion>1.0</AppVersion></Properties>'
+    app = f'<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties" xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"><Application>open-slide-py</Application><PresentationFormat>Custom</PresentationFormat><Slides>{len(slides)}</Slides><Notes>{sum(bool(s.get("notes")) for s in slides)}</Notes><HiddenSlides>0</HiddenSlides><AppVersion>1.0</AppVersion></Properties>'
     add("docProps/app.xml", DECL + app, "application/vnd.openxmlformats-officedocument.extended-properties+xml")
     pres_rels = [("rId1", "slideMaster", "slideMasters/slideMaster1.xml", False)]
     slide_ids = ''.join(f'<p:sldId id="{256 + i}" r:id="rId{i + 2}"/>' for i in range(len(slides)))
