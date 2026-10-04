@@ -42,17 +42,26 @@ def _unique_object(pairs):
     return result
 
 
-def load_deck(path) -> dict:
-    """Read UTF-8 JSON, reject ambiguous JSON and validate assets beside the file."""
+def _reject_constant(name):
+    raise ValueError(f"Invalid JSON number: {name}")
+
+
+def read_deck(path):
+    """Read UTF-8 JSON and reject ambiguous JSON (duplicate keys, NaN, Infinity) without validating the scene."""
     source = Path(path)
     if source.stat().st_size > MAX_DOCUMENT_BYTES:
         raise ValueError("Deck exceeds the 32 MiB document limit")
     try:
-        deck = json.loads(source.read_text(encoding="utf-8-sig"), object_pairs_hook=_unique_object,
-                          parse_constant=lambda s: (_ for _ in ()).throw(ValueError(f"Invalid JSON number: {s}")))
-    except (json.JSONDecodeError, UnicodeError, RecursionError) as exc:
+        return json.loads(source.read_text(encoding="utf-8-sig"), object_pairs_hook=_unique_object,
+                          parse_constant=_reject_constant)
+    except (ValueError, UnicodeError, RecursionError) as exc:
         raise ValueError(f"Invalid deck JSON: {exc}") from exc
-    assert_valid(deck, source.parent)
+
+
+def load_deck(path) -> dict:
+    """Read a deck and validate it, including the assets beside the file."""
+    deck = read_deck(path)
+    assert_valid(deck, Path(path).parent)
     return deck
 
 

@@ -2,3 +2,8 @@ __pycache__/
 *.pyc
 .DS_Store
 evidence/
+.venv/
+*.egg-info/
+build/
+dist/
+uv.lock

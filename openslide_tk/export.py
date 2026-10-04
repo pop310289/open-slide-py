@@ -143,7 +143,7 @@ def _player_html(deck, base_dir):
             f'<section class="os-slide" id="slide-{i + 1}" data-os-slide="{i + 1}" '
             f'data-os-transition="{slide.get("transition", "none")}" aria-label="{name}">'
             + _svg(deck, i, base_dir, anchors)
-            + f'<details class="os-notes" data-os-notes><summary>講者備註</summary>'
+            + '<details class="os-notes" data-os-notes><summary>講者備註</summary>'
             + f'<p>{escape(slide.get("notes") or "本頁沒有講者備註。")}</p></details></section>')
         cards.append(f'<a class="os-card" href="#slide-{i + 1}" data-os-go="{i + 1}">'
                      f'<span class="os-preview" aria-hidden="true"></span>'

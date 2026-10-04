@@ -43,6 +43,18 @@ def tcl_version(tclsh):
     return (int(match.group(1)), int(match.group(2))) if match else None
 
 
+def stop_process(process, timeout=5):
+    """Ask the GUI to exit; kill it when it does not stop within timeout seconds."""
+    if process.poll() is not None:
+        return
+    process.terminate()
+    try:
+        process.wait(timeout=timeout)
+    except subprocess.TimeoutExpired:
+        process.kill()
+        process.wait(timeout=timeout)
+
+
 def find_wish():
     """OPENSLIDE_WISH is used as given; otherwise the first wish whose Tcl is 8.6+ (macOS ships Tk 8.5 in /usr/bin)."""
     configured = os.environ.get("OPENSLIDE_WISH")
@@ -535,9 +547,7 @@ class Viewer:
         finally:
             if self._raster_executor is not None:
                 self._raster_executor.shutdown(wait=False, cancel_futures=True)
-            if self.process.poll() is None:
-                self.process.terminate()
-                self.process.wait(timeout=5)
+            stop_process(self.process)
             for reader in readers:
                 reader.join(timeout=1)
             for stream in (self.process.stdin, self.process.stdout, self.process.stderr):

@@ -37,9 +37,9 @@ def main(argv=None):
             if result:
                 print(json.dumps(result, ensure_ascii=False, indent=2))
         elif args.command == "validate":
-            from .model import load_deck, validate_deck
-            deck = load_deck(args.deck)
-            diagnostics = validate_deck(deck, args.deck.parent)
+            from .model import read_deck, validate_deck
+            # Report every error and warning as JSON; load_deck would stop at the first invalid scene.
+            diagnostics = validate_deck(read_deck(args.deck), args.deck.parent)
             print(json.dumps(diagnostics, ensure_ascii=False, indent=2))
             return int(any(d["severity"] == "error" for d in diagnostics))
         elif args.command == "export":

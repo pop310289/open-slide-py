@@ -20,8 +20,11 @@ def run(args, env=None, timeout=120):
     return subprocess.run([sys.executable, *args], cwd=ROOT, env=env, capture_output=True, text=True, timeout=timeout)
 
 
+def normalize(text):
+    return re.sub(r"\s+", "", text)
+
+
 def content_check(path, deck):
-    normalize = lambda text: re.sub(r"\s+", "", text)
     results = []
     with zipfile.ZipFile(path) as archive:
         if archive.testzip():

@@ -14,7 +14,7 @@ A Python standard-library and Tcl/Tk port of [open-slide](https://github.com/ope
 
 ## Quick start
 
-Run the commands from the repository root; the package does not need to be installed.
+Run the commands from the repository root; the package does not need to be installed. `validate` prints every error and warning as JSON and exits with status 1 when there are errors. `init` writes a small Traditional Chinese sample deck; for an English start, copy the example under *Scene format*.
 
 ```sh
 git clone https://github.com/pop310289/open-slide-py
@@ -74,7 +74,9 @@ Some tests are skipped when their tools are missing: four open real Tk windows a
 
 - Opening, editing and re-saving the PPTX in PowerPoint or Keynote has not been verified, and neither has Windows font substitution.
 - Fonts are declared, not embedded, so the device that opens the file decides the actual glyphs.
-- The interactive player's controls are in Traditional Chinese only.
+- The interactive player's controls, the desktop editor and the `init` sample deck are in Traditional Chinese.
+- PPTX text is broken into lines in advance (one paragraph per line, no automatic wrapping), so every renderer breaks lines in the same place, but PowerPoint does not reflow the text when you edit it.
+- A `line` runs from the top-left to the bottom-right corner of its box; the other diagonal cannot be drawn.
 - `validate` estimates text overflow but does not detect overlapping text boxes.
 - There is no PPTX import, video, Morph transition or native PDF writer. To get a PDF, print the HTML.
 
