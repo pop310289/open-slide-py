@@ -182,7 +182,7 @@ def text_width(text, font_size):
             units += 1.0
         elif char in "MW@%&":
             units += 0.9
-        elif char in "il.,:;!'| ":
+        elif char in "il.,:;!'| \u00a0\u202f":
             units += 0.3
         else:
             units += 0.57
@@ -191,6 +191,25 @@ def text_width(text, font_size):
 
 # Closing punctuation must not begin a line; the word (or CJK character) before it moves down with it.
 NO_LINE_START = frozenset(".,;:!?%)]}»…’”、。，．；：！？％）］｝」』〕〉》】〗〙〛")
+# No-break, figure and narrow no-break spaces are never a line break: "24 pt" or "Fig. 3" stays on one line.
+NO_BREAK_SPACES = "\u00a0\u2007\u202f"
+TOKEN_RE = re.compile(rf"[^\S\n{NO_BREAK_SPACES}]+|[{NO_BREAK_SPACES}]+|[^\W\s]+|[^\w\s]")
+
+
+def breaks(char):
+    return char.isspace() and char not in NO_BREAK_SPACES
+
+
+def wrap_tokens(paragraph):
+    """Whitespace runs, word runs and single symbols; a no-break space glues the tokens on both sides into one."""
+    tokens = []
+    for token in TOKEN_RE.findall(paragraph):
+        if tokens and (token[0] in NO_BREAK_SPACES or tokens[-1][-1] in NO_BREAK_SPACES) \
+                and not breaks(token[0]) and not breaks(tokens[-1][-1]):
+            tokens[-1] += token
+        else:
+            tokens.append(token)
+    return tokens
 
 
 def wrap_text(text, width, font_size):
@@ -202,13 +221,13 @@ def wrap_text(text, width, font_size):
             continue
         current = []
         current_width = 0.0
-        for token in re.findall(r"[^\S\n]+|[^\W\s]+|[^\w\s]", paragraph, re.UNICODE):
+        for token in wrap_tokens(paragraph):
             token_width = text_width(token, font_size)
             if current and current_width + token_width > width:
                 carry = []
-                if token in NO_LINE_START and not current[-1].isspace():
+                if token[0] in NO_LINE_START and not breaks(current[-1]):
                     start = len(current)
-                    while start > 0 and not current[start - 1].isspace():
+                    while start > 0 and not breaks(current[start - 1]):
                         start -= 1
                     if start == 0:  # one word or CJK run: move its last character, with any closing punctuation after it
                         start = len(current) - 1
@@ -221,7 +240,7 @@ def wrap_text(text, width, font_size):
                 lines.append("".join(current).rstrip())
                 current = carry
                 current_width = text_width("".join(carry), font_size)
-                if token.isspace():
+                if breaks(token[0]):
                     continue
             for char in token:
                 char_width = text_width(char, font_size)

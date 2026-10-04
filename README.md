@@ -63,7 +63,7 @@ In a comparison on a five-slide English deck (one run each, October 2026), Claud
 
 ## Quality
 
-The maintainers run 73 tests (macOS, Python 3.14 and 3.9) and an export check of exactly the files in this repository before each update. The tests are not included here; this repository contains only what you need to make slides.
+The maintainers run 75 tests (macOS, Python 3.14 and 3.9) and an export check of exactly the files in this repository before each update. The tests are not included here; this repository contains only what you need to make slides.
 
 ## Known limitations
 
