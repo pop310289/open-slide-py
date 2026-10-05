@@ -1,57 +1,72 @@
-# 場景與 API
+# Scene and API
 
-## 格式
+## Format
 
-根物件：`schema_version: 1`、`id`、`title`、`width`、`height`、`slides`，可加 `metadata`（鍵與值都要是字串，結構化資料請先轉成一段文字）、`lang`。每頁有唯一的 `id`、`title`、`elements`，可加 `background`、`notes`、`transition`。每個元素包含頁內唯一 `id`、`type`、`x`、`y`、`width`、`height`。
+Root object: `schema_version: 1`, `id`, `title`, `width`, `height`, `slides`, and optionally `metadata` (string keys and string values only; turn structured data into one piece of text first) and `lang`. Each slide has a unique `id`, a `title` and `elements`, and optionally `background`, `notes` and `transition`. Each element has an `id` unique within its slide, plus `type`, `x`, `y`, `width` and `height`.
 
 ```json
-{"schema_version":1,"id":"demo","title":"我的簡報","width":1920,"height":1080,"slides":[{"id":"s1","title":"封面","background":"#142F37","notes":"講者備註","elements":[{"id":"title","type":"text","x":120,"y":250,"width":1680,"height":180,"text":"從設計到落地","font_size":100,"font_family":"Arial","east_asian_font":"PingFang TC","color":"#FFFFFF"}]}]}
+{"schema_version":1,"id":"demo","title":"My deck","width":1920,"height":1080,"lang":"en-US","slides":[{"id":"s1","title":"Cover","background":"#142F37","notes":"Speaker notes","elements":[{"id":"title","type":"text","x":120,"y":250,"width":1680,"height":180,"text":"From design to delivery","font_size":100,"font_family":"Arial","east_asian_font":"PingFang TC","color":"#FFFFFF"}]}]}
 ```
 
-| type | 主要欄位 |
+| type | Main fields |
 |---|---|
-| `text` | `text`、`font_size`、`font_family`、`east_asian_font`、`color`、`bold`、`align` |
-| `rect` / `ellipse` | `fill`、`stroke`、`stroke_width`、`opacity` |
-| `line` | `stroke`、`stroke_width`；寬或高可為 0 |
-| `image` | `path`、`alt`；path 是 JSON 目錄內的相對路徑 |
+| `text` | `text`, `font_size`, `font_family`, `east_asian_font`, `color`, `bold`, `align`, `ignore_warnings` |
+| `rect` / `ellipse` | `fill`, `stroke`, `stroke_width`, `opacity` |
+| `line` | `stroke`, `stroke_width`; the width or height may be 0 |
+| `image` | `path`, `alt`; the path is relative and inside the JSON's folder |
 
-所有具體欄位與限制以 `openslide_tk/model.py` 的 `validate_deck` 為準。色彩用六位 `#RRGGBB`，字級與座標以畫布像素計；PPTX 每像素 6350 EMU，文字每像素 0.5 pt。PPTX 畫布邊長 144..8064px、字級 2..2640px。圖片不得超過 25 MiB / 40 megapixels。
+`validate_deck` in `open_slide_py/model.py` is the authority on every field and limit. Colours are six-digit `#RRGGBB`; font sizes and coordinates are canvas pixels. In PPTX one pixel is 6350 EMU and text uses 0.5 pt per pixel. PPTX canvas sides are 144..8064 px and font sizes 2..2640 px. Images may not exceed 25 MiB or 40 megapixels.
 
-`href` 可使用 HTTP(S)、mailto 或 `#slide-id`。`step` 是正整數，同值一起揭露；`transition` 為 `none` 或 `fade`。網頁互動版按實際存在的 step 排序、進入新頁時由零開始，後退至上頁時顯示完整內容。「完整顯示」可暫停逐步模式。PPTX/SVG/靜態 HTML、列印和停用 JavaScript 時均顯示全部元素。
+`href` may be HTTP(S), mailto or `#slide-id`. `step` is a positive integer; elements with the same value appear together; `transition` is `none` or `fade`. The interactive web version orders the steps that exist, starts each new slide at zero and shows a slide complete when you go back to it. "Show full slide" pauses step mode. PPTX, SVG, static HTML, printing and pages with JavaScript disabled always show every element.
 
-## 樣式（卡片與強調）
+## Styles (cards and emphasis)
 
-| 欄位 | 適用 | 說明 |
+| Field | Applies to | Meaning |
 |---|---|---|
-| `radius` | rect、text | 圓角半徑（像素），最多為短邊的一半 |
-| `fill_opacity`、`stroke_opacity` | 有底色或邊框的元素 | 底色與邊框各自的不透明度（0–1），再乘上 `opacity` |
-| `gradient` | rect、ellipse、text | 線性漸層，取代 `fill`：`{"angle": 135, "stops": [{"color": "#FFFFFF", "opacity": 0.12, "at": 0}, {"color": "#FFFFFF", "opacity": 0.02, "at": 1}]}`。`angle` 0 由左到右、90 由上到下；2–8 個色標，`at` 0–1 不可遞減，`opacity` 預設 1 |
-| `shadow` | rect、ellipse、image | 外陰影：`color`（預設 `#000000`）、`opacity`（0.35）、`blur`（24）、`distance`（8）、`angle`（90，向下） |
-| `glow` | rect、ellipse、image | 光暈：`color`（必填）、`opacity`（0.4）、`radius`（16） |
-| `highlights` | text | 把文字裡的片語換色或加粗：`[{"text": "承認不確定", "color": "#FF7A3D"}, {"text": "4 倍", "bold": true}]`。片語必須出現在 `text` 裡，每次出現都會套用，重疊時後面的優先 |
+| `radius` | rect, text | Corner radius in pixels, at most half the short side |
+| `fill_opacity`, `stroke_opacity` | elements with a fill or border | Separate opacity (0–1) of the fill and of the border, multiplied by `opacity` |
+| `gradient` | rect, ellipse, text | Linear gradient that replaces `fill`: `{"angle": 135, "stops": [{"color": "#FFFFFF", "opacity": 0.12, "at": 0}, {"color": "#FFFFFF", "opacity": 0.02, "at": 1}]}`. `angle` 0 runs left to right and 90 top to bottom; 2–8 stops, `at` from 0 to 1 and never decreasing, `opacity` defaults to 1 |
+| `shadow` | rect, ellipse, image | Drop shadow: `color` (default `#000000`), `opacity` (0.35), `blur` (24), `distance` (8), `angle` (90, downwards) |
+| `glow` | rect, ellipse, image | Glow: `color` (required), `opacity` (0.4), `radius` (16) |
+| `highlights` | text | Colour or embolden phrases inside the text: `[{"text": "admit uncertainty", "color": "#FF7A3D"}, {"text": "4 times", "bold": true}]`. A phrase must occur in `text`; every occurrence is styled, and a later highlight wins where two overlap |
 
-PPTX 全部用原生格式（圓角矩形、漸層填色、光暈與外陰影、同一段落的多個文字片段），仍可編輯；HTML/SVG 用 `rx`、`linearGradient`、SVG 濾鏡與巢狀 `tspan`。PowerPoint 沒有背景模糊，所以做不出毛玻璃的模糊；深色背景上用半透明底色、細邊框與光暈就能表現玻璃卡片。光暈與陰影不能用在文字元素；要讓文字區塊浮起來，在文字下方放一個 rect。
+PPTX uses native formats throughout (rounded rectangles, gradient fills, glow and outer shadow, several text runs in one paragraph), so everything stays editable. By default PPTX text has one `a:p` per paragraph and PowerPoint wraps it itself (`wrap="square"`), re-wrapping edited text; line breaks may differ slightly from SVG and HTML. When a paragraph wraps and its last line holds two words or more, those last two words are joined by a no-break space, so PowerPoint does not leave the last word alone on a line. For exactly the same breaks use `export --fixed-lines` (Python: `export_pptx(..., reflow=False)`); PowerPoint then keeps the lines as they are. HTML and SVG use `rx`, `linearGradient`, SVG filters and nested `tspan`. PowerPoint has no background blur, so frosted glass cannot be blurred; on a dark background, a translucent fill, a thin border and a glow are enough for a glass card. Glow and shadow cannot be used on text elements; to lift a block of text, put a rect under it.
 
-## 語言
+## Language
 
-`lang` 是選填的語言標記，例如 `en-US`、`zh-TW`（字母與連字號，最長 35 字元）。它決定 PPTX 文字與講者備註的校對語言、HTML 的 `lang` 屬性；不是中文（不以 `zh` 開頭）時，靜態 HTML 的外框文字只用英文。未設定時沿用 `zh-TW`（PPTX）、`zh-Hant`（HTML）與中英並列的外框文字。互動播放器的操作介面目前只有中文，`lang` 只改它的 `lang` 屬性。`metadata` 裡的語言欄位不會被讀取。
+`lang` is an optional language tag such as `en-US` or `zh-TW` (letters and hyphens, at most 35 characters). It sets the proofing language of PPTX text and speaker notes and the HTML `lang` attribute; for a language that is not Chinese (not starting with `zh`) the static HTML frame text is English only. Without it, decks keep `zh-TW` (PPTX), `zh-Hant` (HTML) and bilingual frame text. The interactive player's buttons and help switch too: Chinese for Chinese or untagged decks, English for every other language. `init --lang en-US` creates an English starter deck. Language fields inside `metadata` are not read.
 
-## 字型與模式差異
+## Warnings
 
-預設 Latin 為 Arial、East Asian 為 Microsoft JhengHei。`font_family` 與 `east_asian_font` 各接受單一字型名稱，不接受逗號分隔清單。全案同一軸字型一致時，文件主題、備註與 HTML 外框沿用它；混用或無文字時該軸採預設，個別元素不變。
+`validate` checks the layout only when there are no errors, and reports `severity: "warning"`:
 
-PPTX 用 `a:latin` / `a:ea` 分寫；當文件 EA 為 PingFang TC 時，兩份 theme 的 Hant 補充字型設為 Microsoft JhengHei，其他明設 face 保留。這只是 theme 字型選擇提示，不保證明設 PingFang 的文字在缺字型的 Windows 上一定採用它；Windows 實機仍未驗證。HTML/SVG 另外生成 CSS fallback stack。未內嵌字型，實際字形由目標裝置決定。
+| Code | When |
+|---|---|
+| `text_overflow` | After wrapping by font width, the text is taller than its box |
+| `text_overlap` | The areas two texts actually cover overlap (text width by alignment, not the boxes) |
+| `low_contrast` | Text or a highlighted phrase has less than 4.5:1 contrast with what lies behind it; 3:1 from 18 pt, or 14 pt bold, after scaling. The backdrop is the background plus the shapes under the text (translucent fills are blended, gradients count their worst end); text over an image is not judged |
+| `small_text` | A sentence of five or more words (two Chinese characters count as one word), not a label in capitals, is smaller than 36 px (18 pt) on a 1920 px canvas, scaled for other canvas widths |
+| `repeated_text` | The same sentence (five or more words, ignoring case and spacing, labels in capitals excepted) is on two or more slides; reported from the second occurrence |
+| `missing_alt` | An image has no alternative text |
+
+For a deliberate exception (a "too small" or "grey on grey" example, a sentence that calls back to the opening), add a list such as `"ignore_warnings": ["small_text"]` to the element; it accepts only `text_overflow`, `text_overlap`, `low_contrast`, `small_text` and `repeated_text`.
+
+## Fonts and differences between outputs
+
+The default Latin font is Arial and the default East Asian font Microsoft JhengHei. Lines wrap by the font's real widths: Arial, Georgia, Times New Roman, Verdana, Courier New, Trebuchet MS and Tahoma (regular and bold) use their advance widths plus a 2% margin; Helvetica, Liberation Sans and Arimo count as Arial, Gelasio as Georgia, Times, Liberation Serif and Tinos as Times New Roman, and Courier, Liberation Mono and Cousine as Courier New. Other fonts use a conservative font-independent estimate, which can be too narrow for capitals and arrows; use a listed font when line breaks must be exact. `font_family` and `east_asian_font` each take one font name, not a comma-separated list. When the whole deck uses one face per script, the document theme, notes and HTML frame use it; with mixed faces or no text, that script falls back to the default, and individual elements keep their own fonts.
+
+PPTX writes `a:latin` and `a:ea` separately; when the document's East Asian face is PingFang TC, both themes set Microsoft JhengHei as the Hant supplemental font and keep other explicit faces. This is only a theme hint: it does not guarantee that text set in PingFang will use it on a Windows machine without that font, and Windows itself is still untested. HTML and SVG get their own CSS fallback stack. Fonts are not embedded; the actual glyphs come from the viewing device.
 
 ## Python API
 
-從此 skill 根目錄執行，或把它設為 `PYTHONPATH`：
+Run from this skill's root folder, or put it on `PYTHONPATH`:
 
 ```python
 from pathlib import Path
-from openslide_tk.model import load_deck, validate_deck
-from openslide_tk.storage import save_deck
-from openslide_tk.export import export_html, export_svg, svg_markup
-from openslide_tk.pptx import export_pptx
+from open_slide_py.model import load_deck, validate_deck
+from open_slide_py.storage import save_deck
+from open_slide_py.export import export_html, export_svg, svg_markup
+from open_slide_py.pptx import export_pptx
 
 source = Path('/path/to/my-deck.json')
 deck = load_deck(source)
@@ -62,6 +77,18 @@ export_html(deck, '/path/to/player.html', source.parent, interactive=True)
 export_svg(deck, 0, '/path/to/first.svg', source.parent)
 ```
 
-`read_deck` 只解析 JSON（擋下重複鍵、NaN、Infinity），不驗證場景；`load_deck` 解析並驗證。`svg_markup(deck, slide_index, base_dir=None, anchor_map=None)` 回傳轉義後的 SVG 字串，圖片已內嵌。索引從 0 起算，`anchor_map` 只接受本地 `#anchor` 且須覆蓋所有被引用 slide id。同頁 SVG 再次嵌入時需改寫 ID 與 clip-path 引用。
+With the kit, elements follow the palette and text boxes are sized by font width:
 
-存檔與匯出是原子替換。新檔遵守 umask，覆寫保留目的檔 POSIX mode；不宣稱複製 ACL 或擁有者。無效輸入與輸出失敗不得毀損既有檔案。
+```python
+from open_slide_py.kit import Kit
+kit = Kit("light-red")  # or "dark-orange", or your own palette dict (same keys as kit.THEMES)
+head, top = kit.header(1, "LABEL", "One-line conclusion", "A short subtitle.")
+chart, end = kit.bar_chart("hours", kit.left, top, 1200, [("Meeting", 8), ("Written update", 1.3)], unit=" h")
+slide = kit.slide(1, "Title", head + chart, notes="...")
+problems = kit.check(slide)  # text leaving its card, elements past the margins
+deck = kit.deck("my-deck", "My deck", [slide])
+```
+
+`read_deck` only parses JSON (rejecting duplicate keys, NaN and Infinity) without validating the scene; `load_deck` parses and validates. `svg_markup(deck, slide_index, base_dir=None, anchor_map=None)` returns an escaped SVG string with images embedded. Indexes start at 0; `anchor_map` accepts only local `#anchor` targets and must cover every referenced slide id. When the same slide's SVG is embedded twice, rewrite its IDs and clip-path references.
+
+Saving and exporting replace files atomically. New files follow the umask and overwrites keep the target's POSIX mode; copying ACLs or ownership is not claimed. Invalid input and failed output never damage an existing file.

@@ -53,13 +53,13 @@
         {
           "id": "scope",
           "type": "text",
-          "text": "Python 標準函式庫 · Tcl/Tk 檢視器 · 可編輯 PPTX",
+          "text": "Python 標準函式庫 · 可編輯 PPTX · 離線網頁",
           "x": 140,
           "y": 926,
           "width": 1570,
-          "height": 65,
+          "height": 60,
           "font_family": "Arial",
-          "font_size": 32,
+          "font_size": 36,
           "color": "#8DDEBE",
           "bold": false
         }
@@ -230,7 +230,7 @@
       "id": "evidence",
       "title": "驗收檢查",
       "background": "#0C191E",
-      "notes": "本頁列出此三頁示範的驗收方式，並不呈現原版比較或效能勝出結論。結構驗證與視覺檢查分開記錄；兩次匯出會跨越 ZIP 時間戳精度後比對 bytes。GUI 操作未包含於此小型示範。",
+      "notes": "本頁列出此三頁示範的驗收方式，並不呈現原版比較或效能勝出結論。結構驗證與視覺檢查分開記錄；兩次匯出會跨越 ZIP 時間戳精度後比對 bytes。PowerPoint 編輯往返未包含於此小型示範。",
       "elements": [
         {
           "id": "title",
@@ -339,13 +339,13 @@
         {
           "id": "limit",
           "type": "text",
-          "text": "此示範驗證原生匯出；未測桌面操作或原版引擎差異。",
+          "text": "此示範驗證原生匯出；未測 PowerPoint 編輯往返或原版引擎差異。",
           "x": 135,
           "y": 922,
           "width": 1650,
-          "height": 65,
+          "height": 60,
           "font_family": "Arial",
-          "font_size": 32,
+          "font_size": 36,
           "color": "#8DDEBE",
           "bold": false
         }

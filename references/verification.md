@@ -1,12 +1,12 @@
-# 驗收
+# Verification
 
-## 每份成品
+## Every output
 
-- `python3 -m openslide_tk validate deck.json` 會把所有錯誤與警告輸出成 JSON，有錯誤時結束碼為 1。錯誤要為零；警告（文字估計溢出、元素超出畫布、圖片缺替代文字）逐項檢視。它不檢查文字框互相重疊，要看實際畫面。
-- 逐頁比對文字、數字、單位、備註與連結。
-- 以實際渲染尺寸看全頁和細節，記錄溢出、裁切、圖說對應、來源與註腳可讀性。結構測試不代表視覺品質。
-- 互動 HTML 要操作鍵盤、工具列、觸控／滑動、逐步顯示、頁目錄、備註與計時。確認離線可用、CSP 無錯誤、停用 JS 和列印仍有完整內容。桌面／手機／模擬器分別標示，不繼承靜態版的零 JS 結論。
-- 在 Office／Keynote 實際修改文字與物件位置、匯出 PPTX、重開並確認修改仍在，才能稱為編輯往返。記錄 app/OS、輸入與輸出 SHA-256、操作與渲染證據。只有開檔不算完成往返。
-- 字型分別驗收 OOXML 宣告、作業系統實際解析、輸出渲染／PDF 字型。未在 Windows 實測就寫未驗證，不能以 theme 宣告冒充跨平台保真。
+- `python3 -m open_slide_py validate deck.json` prints every error and warning as JSON and exits with 1 when there are errors. Errors must be zero; handle each warning (text overflow, overlapping text, low contrast, small sentences, sentences repeated across slides, images without alternative text), and mark deliberate exceptions with `ignore_warnings` and explain them in the report. Warnings are estimates; the real rendering still has the last word.
+- Compare the text, numbers, units, notes and links slide by slide.
+- Look at whole slides and details at the real rendering size, and record overflow, clipping, how labels match figures, and whether sources and footnotes are legible. Structural tests do not stand for visual quality.
+- For the interactive HTML, use the keyboard, toolbar, touch and swipes, step mode, the slide list, notes and the timer. Check that it works offline, that the CSP reports no errors, and that the content is complete with JavaScript disabled and when printed. Label desktop, phone and emulator checks separately, and do not carry over the static version's no-JavaScript result.
+- Only editing text and object positions in Office or Keynote, saving a PPTX, reopening it and finding the changes intact counts as an editing round trip. Record the app and OS, the SHA-256 of the input and output, the steps and the rendering evidence. Opening the file alone is not a round trip.
+- Check fonts separately as OOXML declarations, what the operating system actually resolves, and what the output renders or embeds in a PDF. Without a test on Windows, say it is unverified; a theme declaration is not cross-platform fidelity.
 
-輸出或來源改變後，過期的 hash、畫面及往返結果只可作歷史記錄。交付來源 JSON、素材、要求的成品及與版本一致的驗收摘要；本 skill 自帶的範例不替新案背書。
+Once the output or the source changes, older hashes, screenshots and round-trip results are history only. Deliver the source JSON, the assets, the requested outputs and a check summary that matches the version; the examples bundled with this skill do not vouch for a new project.

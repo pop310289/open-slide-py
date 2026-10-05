@@ -1,16 +1,19 @@
-# 來源與範圍
+# Provenance and scope
 
-open-slide-py 依 open-slide（作者 Yiwei Ho，MIT 授權，見 `LICENSE-UPSTREAM`）的行為與設計概念，用 Python 標準函式庫重新實作。它不是 open-slide 的官方版本，也和醫學影像函式庫 OpenSlide 無關。本專案以 MIT 授權釋出（見 `LICENSE`）。
+open-slide-py reimplements the behaviour and design concepts of open-slide (by Yiwei Ho, MIT licence, see `LICENSE-UPSTREAM`) with the Python standard library. It is not an official version of open-slide, and it is unrelated to the OpenSlide whole-slide imaging library (`openslide-python`). This project is released under the MIT licence (see `LICENSE`).
 
-## 收錄範圍
+## What is included
 
-- `openslide_tk/`：場景模型與驗證、PPTX／SVG／靜態 HTML／互動播放器匯出，以及播放器用的 CSS/JS。
-- `examples/demo.json`：三頁示範簡報。
-- 不含上游 React/Node 版的 adapter、案例成品、部署腳本與比較工具；也沒有圖形編輯器（早期的 Tcl/Tk 桌面編輯器已移除，直接編輯 JSON）。
-- 測試與驗證程式由維護者另外保存，每次更新前執行，不隨本專案發布。
+- `open_slide_py/`: the scene model and validation, layout warnings, the PPTX, SVG, static HTML and interactive player exports, the player's CSS and JS, the font width tables (`metrics.py`) and the kit (`kit.py`).
+- `examples/demo.json`: a three-slide demo in Traditional Chinese. `examples/build_good_slides.py` and `examples/good-slides.json`: a six-slide English example written with the kit (`--theme` picks either palette).
+- The width tables are advance widths per 1000 em read from the macOS font files: numbers only, no glyph outlines. The metric-compatible open fonts (Liberation, Arimo, Tinos, Cousine, Gelasio) have the same widths.
+- Not included: the upstream React/Node version's adapters, case outputs, deployment scripts and comparison tools. There is no visual editor; edit the JSON directly.
+- The maintainers keep the tests and check scripts separately and run them before each update; they are not published here.
 
-## 已驗證與未驗證
+## Verified and not verified
 
-- 已驗證（macOS、Python 3.14 與 3.9）：75 項測試；四種格式都能在 `python3 -S` 下匯出；同一份場景重複匯出的 PPTX 位元組相同；PPTX 保留每頁文字與講者備註；靜態 HTML 不含 JavaScript。
-- 未驗證：在 PowerPoint／Keynote 開啟、修改、存檔後再開的編輯往返；Windows 的字型替代與版面；實體手機上的觸控操作。字型只宣告、不內嵌，實際字形由開啟的裝置決定。
-- 已知限制：互動播放器的操作介面與 `init` 的範例簡報只有中文；PPTX 文字預先斷行（每行一個段落、不自動換行），各渲染器斷行位置一致，但在 PowerPoint 裡修改時不會重新排版；`line` 只能從外框左上畫到右下；`validate` 會估算文字溢出，但不檢查文字框互相重疊；不支援 PPTX 匯入、影片、Morph 轉場或原生 PDF 輸出（可由 HTML 列印成 PDF）。
+- Verified (macOS, Python 3.14 and 3.9): 127 tests; all four formats export under `python3 -S`; exporting the same scene twice gives byte-identical PPTX files; PPTX keeps every slide's text and speaker notes; the static HTML contains no JavaScript.
+- Widths: against 580 English lines measured by Chrome with the real fonts, the tables have a mean error of 0.1% and underestimate by at most 0.045%; the earlier font-independent estimate had a mean error of 10.0% and underestimated every line in capitals.
+- A second PPTX renderer: GenOffice 0.11.0 `slides audit` and `slides render` found no layout issues in the six-slide example in both palettes, with PowerPoint wrapping and with `--fixed-lines`, and drew the glow, shadows and gradients; with PowerPoint wrapping, no wrapped paragraph ends with a lone word (10 wrapped paragraphs in the two examples; 4 did before this was fixed). It is not PowerPoint.
+- Not verified: opening, editing, saving and reopening in PowerPoint or Keynote; Windows font substitution and layout; touch on a physical phone. Fonts are declared, not embedded, so the device that opens the file decides the actual glyphs.
+- Known limitations: a `line` runs only from the top-left to the bottom-right corner of its box; PowerPoint wraps PPTX text itself by default, so line breaks may differ slightly from SVG and HTML (`--fixed-lines` keeps them identical, but then edited text does not re-wrap); warnings are estimates and the real rendering still has the last word; there is no PPTX import, video, Morph transition or native PDF writer (print the HTML to get a PDF).

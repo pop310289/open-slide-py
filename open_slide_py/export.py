@@ -196,21 +196,50 @@ def export_svg(deck, slide_index, output_path, base_dir=None) -> Path:
     return write_atomic(output_path, '<?xml version="1.0" encoding="UTF-8"?>\n' + svg_markup(deck, slide_index, base_dir))
 
 
+# Player controls by deck language: Chinese (and unlabelled) decks keep the original Chinese controls.
+PLAYER_TEXT = {
+    "zh": {"slide": "投影片 {}", "notes": "講者備註", "no_notes": "本頁沒有講者備註。", "skip": "跳至投影片", "catalog": "目錄", "tools": "工具",
+           "prev_label": "上一個步驟或上一頁", "prev_title": "← 上一步", "progress": "投影片進度", "next_label": "下一個步驟或下一頁",
+           "next_title": "→ 下一步", "timer": "播放計時", "directory": "投影片目錄", "close": "關閉", "close_directory": "關閉目錄",
+           "toolbox": "播放工具", "close_tools": "關閉工具", "full": "顯示完整頁", "fullscreen": "全螢幕", "timer_start": "開始計時",
+           "timer_reset": "計時歸零",
+           "help_keys": "→ / PageDown / 空白鍵前進；← / PageUp / Shift＋空白鍵後退。Home 回首頁，End 到末頁。觸控左右滑動也能換步驟。目錄可直接跳頁，Esc 關閉面板。",
+           "help_steps": "逐步模式會依作者設定顯示內容。「顯示完整頁」可一次展開；列印永遠包含全部內容。輸入框、按鈕與面板內保留原本的鍵盤操作。"},
+    "en": {"slide": "Slide {}", "notes": "Speaker notes", "no_notes": "No speaker notes for this slide.", "skip": "Skip to slides",
+           "catalog": "Slides", "tools": "Tools", "prev_label": "Previous step or slide", "prev_title": "← Previous", "progress": "Slide progress",
+           "next_label": "Next step or slide", "next_title": "→ Next", "timer": "Timer", "directory": "All slides", "close": "Close",
+           "close_directory": "Close the slide list", "toolbox": "Player tools", "close_tools": "Close the tools", "full": "Show full slide",
+           "fullscreen": "Full screen", "timer_start": "Start timer", "timer_reset": "Reset timer",
+           "help_keys": "→, PageDown or Space moves forward; ←, PageUp or Shift+Space moves back. Home goes to the first slide and End to the last. "
+                        "Swipe left or right on a touch screen. Jump to any slide from the slide list; Esc closes a panel.",
+           "help_steps": "Step mode reveals content in the order the author set. Show full slide reveals everything at once; printing always "
+                         "includes all content. Text fields, buttons and panels keep their usual keyboard behaviour."},
+}
+# Status strings inside player.js, replaced for non-Chinese decks (longest first, so a phrase inside a longer one stays whole).
+PLAYER_SCRIPT_EN = {"目前瀏覽器無法啟用全螢幕；仍可使用完整播放功能。": "This browser cannot go full screen; everything else still works.",
+                    "本頁完整顯示": "Whole slide shown", "結束全螢幕": "Exit full screen", "完整顯示": "Full slide", "全螢幕": "Full screen",
+                    "開始計時": "Start timer", "暫停計時": "Pause timer", "逐步 ": "Step "}
+
+
 def _player_html(deck, base_dir):
     assets = Path(__file__).with_name("web")
     css = (assets / "player.css").read_text(encoding="utf-8")
     javascript = (assets / "player.js").read_text(encoding="utf-8")
+    t = PLAYER_TEXT["zh" if bilingual_labels(deck) else "en"]
+    if t is PLAYER_TEXT["en"]:
+        for chinese in sorted(PLAYER_SCRIPT_EN, key=len, reverse=True):
+            javascript = javascript.replace(chinese, PLAYER_SCRIPT_EN[chinese])
     title = escape(deck["title"])
     anchors = {slide["id"]: f"#slide-{i + 1}" for i, slide in enumerate(deck["slides"])}
     sections, cards = [], []
     for i, slide in enumerate(deck["slides"]):
-        name = escape(slide.get("title") or f"投影片 {i + 1}")
+        name = escape(slide.get("title") or t["slide"].format(i + 1))
         sections.append(
             f'<section class="os-slide" id="slide-{i + 1}" data-os-slide="{i + 1}" '
             f'data-os-transition="{slide.get("transition", "none")}" aria-label="{name}">'
             + _svg(deck, i, base_dir, anchors)
-            + '<details class="os-notes" data-os-notes><summary>講者備註</summary>'
-            + f'<p>{escape(slide.get("notes") or "本頁沒有講者備註。")}</p></details></section>')
+            + f'<details class="os-notes" data-os-notes><summary>{t["notes"]}</summary>'
+            + f'<p>{escape(slide.get("notes") or t["no_notes"])}</p></details></section>')
         cards.append(f'<a class="os-card" href="#slide-{i + 1}" data-os-go="{i + 1}">'
                      f'<span class="os-preview" aria-hidden="true"></span>'
                      f'<span class="os-card-title"><b>{i + 1:02d}</b> {name}</span></a>')
@@ -231,20 +260,20 @@ def _player_html(deck, base_dir):
 <meta name="generator" content="open-slide-py offline player">
 <title>{title}</title><style>{stylesheet}</style></head>
 <body class="os-player">
-<a class="os-skip" href="#os-stage">跳至投影片</a>
+<a class="os-skip" href="#os-stage">{t["skip"]}</a>
 <header class="os-top"><div class="os-heading"><span class="os-brand">open-slide-py</span><h1>{title}</h1></div>
-<div class="os-top-actions" data-os-controls hidden><button type="button" id="os-catalog" aria-haspopup="dialog">目錄</button><button type="button" id="os-tools" aria-haspopup="dialog">工具</button></div></header>
+<div class="os-top-actions" data-os-controls hidden><button type="button" id="os-catalog" aria-haspopup="dialog">{t["catalog"]}</button><button type="button" id="os-tools" aria-haspopup="dialog">{t["tools"]}</button></div></header>
 <main id="os-stage" tabindex="-1">{''.join(sections)}</main>
 <footer class="os-controls" data-os-controls hidden>
-<div class="os-navigation"><button type="button" id="os-prev" aria-label="上一個步驟或上一頁" title="← 上一步">←</button>
-<div class="os-position"><span id="os-page" aria-live="polite" aria-atomic="true">1 / {len(sections)}</span><progress id="os-progress" max="{len(sections)}" value="1" aria-label="投影片進度"></progress></div>
-<button type="button" id="os-next" aria-label="下一個步驟或下一頁" title="→ 下一步">→</button></div>
-<div class="os-status"><span id="os-step-status" aria-live="polite" aria-atomic="true"></span><span class="os-timer-label">播放計時 <output id="os-timer" aria-label="播放計時">00:00</output></span></div>
+<div class="os-navigation"><button type="button" id="os-prev" aria-label="{t["prev_label"]}" title="{t["prev_title"]}">←</button>
+<div class="os-position"><span id="os-page" aria-live="polite" aria-atomic="true">1 / {len(sections)}</span><progress id="os-progress" max="{len(sections)}" value="1" aria-label="{t["progress"]}"></progress></div>
+<button type="button" id="os-next" aria-label="{t["next_label"]}" title="{t["next_title"]}">→</button></div>
+<div class="os-status"><span id="os-step-status" aria-live="polite" aria-atomic="true"></span><span class="os-timer-label">{t["timer"]} <output id="os-timer" aria-label="{t["timer"]}">00:00</output></span></div>
 </footer>
-<dialog id="os-directory" aria-labelledby="os-directory-title"><div class="os-dialog-heading"><h2 id="os-directory-title">投影片目錄</h2><button type="button" data-os-close aria-label="關閉目錄">關閉</button></div><div class="os-cards">{''.join(cards)}</div></dialog>
-<dialog id="os-toolbox" aria-labelledby="os-toolbox-title"><div class="os-dialog-heading"><h2 id="os-toolbox-title">播放工具</h2><button type="button" data-os-close aria-label="關閉工具">關閉</button></div>
-<div class="os-tool-grid"><button type="button" id="os-notes-toggle" aria-pressed="false">講者備註</button><button type="button" id="os-full-toggle" aria-pressed="false">顯示完整頁</button><button type="button" id="os-fullscreen" aria-pressed="false">全螢幕</button><button type="button" id="os-timer-toggle" aria-pressed="false">開始計時</button><button type="button" id="os-timer-reset">計時歸零</button></div>
-<p class="os-help">→ / PageDown / 空白鍵前進；← / PageUp / Shift＋空白鍵後退。Home 回首頁，End 到末頁。觸控左右滑動也能換步驟。目錄可直接跳頁，Esc 關閉面板。</p><p class="os-help">逐步模式會依作者設定顯示內容。「顯示完整頁」可一次展開；列印永遠包含全部內容。輸入框、按鈕與面板內保留原本的鍵盤操作。</p><p id="os-message" role="status"></p></dialog>
+<dialog id="os-directory" aria-labelledby="os-directory-title"><div class="os-dialog-heading"><h2 id="os-directory-title">{t["directory"]}</h2><button type="button" data-os-close aria-label="{t["close_directory"]}">{t["close"]}</button></div><div class="os-cards">{''.join(cards)}</div></dialog>
+<dialog id="os-toolbox" aria-labelledby="os-toolbox-title"><div class="os-dialog-heading"><h2 id="os-toolbox-title">{t["toolbox"]}</h2><button type="button" data-os-close aria-label="{t["close_tools"]}">{t["close"]}</button></div>
+<div class="os-tool-grid"><button type="button" id="os-notes-toggle" aria-pressed="false">{t["notes"]}</button><button type="button" id="os-full-toggle" aria-pressed="false">{t["full"]}</button><button type="button" id="os-fullscreen" aria-pressed="false">{t["fullscreen"]}</button><button type="button" id="os-timer-toggle" aria-pressed="false">{t["timer_start"]}</button><button type="button" id="os-timer-reset">{t["timer_reset"]}</button></div>
+<p class="os-help">{t["help_keys"]}</p><p class="os-help">{t["help_steps"]}</p><p id="os-message" role="status"></p></dialog>
 <script>{javascript}</script></body></html>'''
 
 

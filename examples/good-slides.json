@@ -1,0 +1,2130 @@
+{
+ "schema_version": 1,
+ "id": "good-slides",
+ "title": "How to Make Good Presentation Slides",
+ "width": 1920,
+ "height": 1080,
+ "lang": "en-US",
+ "slides": [
+  {
+   "id": "s1",
+   "title": "Slides support you",
+   "background": "#0E0F12",
+   "elements": [
+    {
+     "id": "label1",
+     "type": "text",
+     "x": 120,
+     "y": 84,
+     "width": 1100,
+     "height": 40,
+     "text": "YOUR FIRST WORK PRESENTATION",
+     "font_size": 30,
+     "font_family": "Arial",
+     "color": "#FF7A3D",
+     "bold": true
+    },
+    {
+     "id": "rule1",
+     "type": "line",
+     "x": 120,
+     "y": 136,
+     "width": 420,
+     "height": 0,
+     "stroke": "#FF7A3D",
+     "stroke_width": 2,
+     "stroke_opacity": 0.6
+    },
+    {
+     "id": "hook1",
+     "type": "text",
+     "x": 120,
+     "y": 172,
+     "width": 1680,
+     "height": 70,
+     "text": "Ever watched a speaker read every slide aloud?",
+     "font_size": 52,
+     "font_family": "Georgia",
+     "color": "#A9A39B"
+    },
+    {
+     "id": "title1",
+     "type": "text",
+     "x": 120,
+     "y": 258,
+     "width": 1680,
+     "height": 224,
+     "text": "Your slides support you.\nThey don't replace you.",
+     "font_size": 88,
+     "font_family": "Georgia",
+     "color": "#EDE7DF",
+     "highlights": [
+      {
+       "text": "support you",
+       "color": "#FF7A3D"
+      }
+     ]
+    },
+    {
+     "id": "roadmap",
+     "type": "text",
+     "x": 120,
+     "y": 574,
+     "width": 600,
+     "height": 40,
+     "text": "FOUR HABITS",
+     "font_size": 30,
+     "font_family": "Arial",
+     "color": "#A9A39B",
+     "bold": true
+    },
+    {
+     "id": "habit1-card",
+     "type": "rect",
+     "x": 120,
+     "y": 630,
+     "width": 396,
+     "height": 268,
+     "radius": 32,
+     "gradient": {
+      "angle": 135,
+      "stops": [
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.1,
+        "at": 0
+       },
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.03,
+        "at": 1
+       }
+      ]
+     },
+     "stroke": "#FFFFFF",
+     "stroke_opacity": 0.18,
+     "stroke_width": 2
+    },
+    {
+     "id": "habit1-no-box",
+     "type": "rect",
+     "x": 156,
+     "y": 666,
+     "width": 84,
+     "height": 56,
+     "radius": 14,
+     "stroke": "#FF7A3D",
+     "stroke_opacity": 0.8,
+     "stroke_width": 2
+    },
+    {
+     "id": "habit1-no",
+     "type": "text",
+     "x": 156,
+     "y": 674,
+     "width": 84,
+     "height": 40,
+     "text": "01",
+     "font_size": 30,
+     "font_family": "Arial",
+     "color": "#FF7A3D",
+     "bold": true,
+     "align": "center"
+    },
+    {
+     "id": "habit1",
+     "type": "text",
+     "x": 156,
+     "y": 746,
+     "width": 324,
+     "height": 112,
+     "text": "One message per slide",
+     "font_size": 44,
+     "font_family": "Georgia",
+     "color": "#EDE7DF"
+    },
+    {
+     "id": "habit2-card",
+     "type": "rect",
+     "x": 548,
+     "y": 630,
+     "width": 396,
+     "height": 268,
+     "radius": 32,
+     "gradient": {
+      "angle": 135,
+      "stops": [
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.1,
+        "at": 0
+       },
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.03,
+        "at": 1
+       }
+      ]
+     },
+     "stroke": "#FFFFFF",
+     "stroke_opacity": 0.18,
+     "stroke_width": 2
+    },
+    {
+     "id": "habit2-no-box",
+     "type": "rect",
+     "x": 584,
+     "y": 666,
+     "width": 84,
+     "height": 56,
+     "radius": 14,
+     "stroke": "#FF7A3D",
+     "stroke_opacity": 0.8,
+     "stroke_width": 2
+    },
+    {
+     "id": "habit2-no",
+     "type": "text",
+     "x": 584,
+     "y": 674,
+     "width": 84,
+     "height": 40,
+     "text": "02",
+     "font_size": 30,
+     "font_family": "Arial",
+     "color": "#FF7A3D",
+     "bold": true,
+     "align": "center"
+    },
+    {
+     "id": "habit2",
+     "type": "text",
+     "x": 584,
+     "y": 746,
+     "width": 324,
+     "height": 112,
+     "text": "Less text, more meaning",
+     "font_size": 44,
+     "font_family": "Georgia",
+     "color": "#EDE7DF"
+    },
+    {
+     "id": "habit3-card",
+     "type": "rect",
+     "x": 976,
+     "y": 630,
+     "width": 396,
+     "height": 268,
+     "radius": 32,
+     "gradient": {
+      "angle": 135,
+      "stops": [
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.1,
+        "at": 0
+       },
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.03,
+        "at": 1
+       }
+      ]
+     },
+     "stroke": "#FFFFFF",
+     "stroke_opacity": 0.18,
+     "stroke_width": 2
+    },
+    {
+     "id": "habit3-no-box",
+     "type": "rect",
+     "x": 1012,
+     "y": 666,
+     "width": 84,
+     "height": 56,
+     "radius": 14,
+     "stroke": "#FF7A3D",
+     "stroke_opacity": 0.8,
+     "stroke_width": 2
+    },
+    {
+     "id": "habit3-no",
+     "type": "text",
+     "x": 1012,
+     "y": 674,
+     "width": 84,
+     "height": 40,
+     "text": "03",
+     "font_size": 30,
+     "font_family": "Arial",
+     "color": "#FF7A3D",
+     "bold": true,
+     "align": "center"
+    },
+    {
+     "id": "habit3",
+     "type": "text",
+     "x": 1012,
+     "y": 746,
+     "width": 324,
+     "height": 112,
+     "text": "Easy to see from the back",
+     "font_size": 44,
+     "font_family": "Georgia",
+     "color": "#EDE7DF"
+    },
+    {
+     "id": "habit4-card",
+     "type": "rect",
+     "x": 1404,
+     "y": 630,
+     "width": 396,
+     "height": 268,
+     "radius": 32,
+     "gradient": {
+      "angle": 135,
+      "stops": [
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.1,
+        "at": 0
+       },
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.03,
+        "at": 1
+       }
+      ]
+     },
+     "stroke": "#FFFFFF",
+     "stroke_opacity": 0.18,
+     "stroke_width": 2
+    },
+    {
+     "id": "habit4-no-box",
+     "type": "rect",
+     "x": 1440,
+     "y": 666,
+     "width": 84,
+     "height": 56,
+     "radius": 14,
+     "stroke": "#FF7A3D",
+     "stroke_opacity": 0.8,
+     "stroke_width": 2
+    },
+    {
+     "id": "habit4-no",
+     "type": "text",
+     "x": 1440,
+     "y": 674,
+     "width": 84,
+     "height": 40,
+     "text": "04",
+     "font_size": 30,
+     "font_family": "Arial",
+     "color": "#FF7A3D",
+     "bold": true,
+     "align": "center"
+    },
+    {
+     "id": "habit4",
+     "type": "text",
+     "x": 1440,
+     "y": 746,
+     "width": 324,
+     "height": 112,
+     "text": "Check before you present",
+     "font_size": 44,
+     "font_family": "Georgia",
+     "color": "#EDE7DF"
+    }
+   ],
+   "notes": "Have you ever watched a speaker read every slide aloud, word for word? It is hard to keep listening. If this is your first presentation at work, the most useful idea to hold on to is this: your audience came to hear you, and the slides are there to help them follow you. A slide is not a document and it is not your script. In the next four slides we will cover four habits: one message per slide, less text, slides that are easy to see, and a short check before you present. Each one takes minutes, not hours."
+  },
+  {
+   "id": "s2",
+   "title": "One slide, one message",
+   "background": "#0E0F12",
+   "elements": [
+    {
+     "id": "label2",
+     "type": "text",
+     "x": 120,
+     "y": 84,
+     "width": 1100,
+     "height": 40,
+     "text": "HABIT 1 OF 4",
+     "font_size": 30,
+     "font_family": "Arial",
+     "color": "#FF7A3D",
+     "bold": true
+    },
+    {
+     "id": "rule2",
+     "type": "line",
+     "x": 120,
+     "y": 136,
+     "width": 420,
+     "height": 0,
+     "stroke": "#FF7A3D",
+     "stroke_width": 2,
+     "stroke_opacity": 0.6
+    },
+    {
+     "id": "title2",
+     "type": "text",
+     "x": 120,
+     "y": 164,
+     "width": 1680,
+     "height": 97,
+     "text": "One slide, one message",
+     "font_size": 72,
+     "font_family": "Georgia",
+     "color": "#EDE7DF"
+    },
+    {
+     "id": "subtitle2",
+     "type": "text",
+     "x": 120,
+     "y": 273,
+     "width": 1680,
+     "height": 54,
+     "text": "Write the title as the point you want people to remember.",
+     "font_size": 40,
+     "font_family": "Arial",
+     "color": "#A9A39B"
+    },
+    {
+     "id": "weak-card",
+     "type": "rect",
+     "x": 120,
+     "y": 371,
+     "width": 820,
+     "height": 398,
+     "radius": 32,
+     "gradient": {
+      "angle": 135,
+      "stops": [
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.1,
+        "at": 0
+       },
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.03,
+        "at": 1
+       }
+      ]
+     },
+     "stroke": "#FFFFFF",
+     "stroke_opacity": 0.18,
+     "stroke_width": 2
+    },
+    {
+     "id": "strong-card",
+     "type": "rect",
+     "x": 980,
+     "y": 371,
+     "width": 820,
+     "height": 398,
+     "radius": 32,
+     "gradient": {
+      "angle": 135,
+      "stops": [
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.1,
+        "at": 0
+       },
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.03,
+        "at": 1
+       }
+      ]
+     },
+     "stroke": "#FF7A3D",
+     "stroke_opacity": 0.55,
+     "stroke_width": 2,
+     "glow": {
+      "color": "#FF7A3D",
+      "opacity": 0.28,
+      "radius": 22
+     }
+    },
+    {
+     "id": "weak-label",
+     "type": "text",
+     "x": 168,
+     "y": 415,
+     "width": 724,
+     "height": 40,
+     "text": "WEAK: A TOPIC",
+     "font_size": 30,
+     "font_family": "Arial",
+     "color": "#A9A39B",
+     "bold": true
+    },
+    {
+     "id": "weak-title",
+     "type": "text",
+     "x": 168,
+     "y": 467,
+     "width": 724,
+     "height": 86,
+     "text": "Q3 Sales",
+     "font_size": 64,
+     "font_family": "Georgia",
+     "color": "#EDE7DF"
+    },
+    {
+     "id": "weak-rule",
+     "type": "line",
+     "x": 168,
+     "y": 639,
+     "width": 96,
+     "height": 0,
+     "stroke": "#FFFFFF",
+     "stroke_width": 3,
+     "stroke_opacity": 0.35
+    },
+    {
+     "id": "weak-note",
+     "type": "text",
+     "x": 168,
+     "y": 671,
+     "width": 724,
+     "height": 54,
+     "text": "People must guess what matters.",
+     "font_size": 40,
+     "font_family": "Arial",
+     "color": "#A9A39B"
+    },
+    {
+     "id": "strong-label",
+     "type": "text",
+     "x": 1028,
+     "y": 415,
+     "width": 724,
+     "height": 40,
+     "text": "STRONG: A MESSAGE",
+     "font_size": 30,
+     "font_family": "Arial",
+     "color": "#FF7A3D",
+     "bold": true
+    },
+    {
+     "id": "strong-title",
+     "type": "text",
+     "x": 1028,
+     "y": 467,
+     "width": 724,
+     "height": 143,
+     "text": "Q3 sales grew because of new clients",
+     "font_size": 56,
+     "font_family": "Georgia",
+     "color": "#EDE7DF",
+     "highlights": [
+      {
+       "text": "because of new clients",
+       "color": "#FF7A3D"
+      }
+     ]
+    },
+    {
+     "id": "strong-rule",
+     "type": "line",
+     "x": 1028,
+     "y": 639,
+     "width": 96,
+     "height": 0,
+     "stroke": "#FF7A3D",
+     "stroke_width": 3
+    },
+    {
+     "id": "strong-note",
+     "type": "text",
+     "x": 1028,
+     "y": 671,
+     "width": 724,
+     "height": 54,
+     "text": "The point is clear before you speak.",
+     "font_size": 40,
+     "font_family": "Arial",
+     "color": "#EDE7DF"
+    },
+    {
+     "id": "test",
+     "type": "text",
+     "x": 120,
+     "y": 809,
+     "width": 1680,
+     "height": 54,
+     "text": "Quick test: if people read only your slide titles, do they get your story?",
+     "font_size": 40,
+     "font_family": "Arial",
+     "color": "#EDE7DF",
+     "highlights": [
+      {
+       "text": "read only your slide titles",
+       "color": "#FF7A3D"
+      }
+     ]
+    }
+   ],
+   "notes": "Habit one: give every slide a single job. The easiest way is to write the title as a short sentence that states your point. Compare the two cards. 'Q3 Sales' is only a topic, so people must work out what matters. 'Q3 sales grew because of new clients' tells them the conclusion immediately, and the rest of the slide becomes evidence. This is an invented example, not real data. A useful test: read only your slide titles from start to finish. If they tell your story on their own, your structure is working. If one slide needs two titles, split it into two slides. Once each slide has one message, how much text should it carry?"
+  },
+  {
+   "id": "s3",
+   "title": "Less text, more meaning",
+   "background": "#0E0F12",
+   "elements": [
+    {
+     "id": "label3",
+     "type": "text",
+     "x": 120,
+     "y": 84,
+     "width": 1100,
+     "height": 40,
+     "text": "HABIT 2 OF 4",
+     "font_size": 30,
+     "font_family": "Arial",
+     "color": "#FF7A3D",
+     "bold": true
+    },
+    {
+     "id": "rule3",
+     "type": "line",
+     "x": 120,
+     "y": 136,
+     "width": 420,
+     "height": 0,
+     "stroke": "#FF7A3D",
+     "stroke_width": 2,
+     "stroke_opacity": 0.6
+    },
+    {
+     "id": "title3",
+     "type": "text",
+     "x": 120,
+     "y": 164,
+     "width": 1680,
+     "height": 97,
+     "text": "Less text, more meaning",
+     "font_size": 72,
+     "font_family": "Georgia",
+     "color": "#EDE7DF"
+    },
+    {
+     "id": "subtitle3",
+     "type": "text",
+     "x": 120,
+     "y": 273,
+     "width": 1680,
+     "height": 54,
+     "text": "People either read or listen. A wall of text makes them read.",
+     "font_size": 40,
+     "font_family": "Arial",
+     "color": "#A9A39B"
+    },
+    {
+     "id": "before-card",
+     "type": "rect",
+     "x": 120,
+     "y": 371,
+     "width": 680,
+     "height": 487,
+     "radius": 32,
+     "gradient": {
+      "angle": 135,
+      "stops": [
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.1,
+        "at": 0
+       },
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.03,
+        "at": 1
+       }
+      ]
+     },
+     "stroke": "#FFFFFF",
+     "stroke_opacity": 0.18,
+     "stroke_width": 2
+    },
+    {
+     "id": "before-label",
+     "type": "text",
+     "x": 168,
+     "y": 419,
+     "width": 584,
+     "height": 40,
+     "text": "BEFORE: EVERYTHING ON THE SLIDE",
+     "font_size": 30,
+     "font_family": "Arial",
+     "color": "#A9A39B",
+     "bold": true
+    },
+    {
+     "id": "before-title",
+     "type": "text",
+     "x": 168,
+     "y": 475,
+     "width": 584,
+     "height": 54,
+     "text": "Project update",
+     "font_size": 40,
+     "font_family": "Georgia",
+     "color": "#A9A39B"
+    },
+    {
+     "id": "before-line1",
+     "type": "rect",
+     "x": 168,
+     "y": 553,
+     "width": 560,
+     "height": 14,
+     "radius": 7,
+     "fill": "#FFFFFF",
+     "fill_opacity": 0.16
+    },
+    {
+     "id": "before-line2",
+     "type": "rect",
+     "x": 168,
+     "y": 587,
+     "width": 500,
+     "height": 14,
+     "radius": 7,
+     "fill": "#FFFFFF",
+     "fill_opacity": 0.16
+    },
+    {
+     "id": "before-line3",
+     "type": "rect",
+     "x": 168,
+     "y": 621,
+     "width": 548,
+     "height": 14,
+     "radius": 7,
+     "fill": "#FFFFFF",
+     "fill_opacity": 0.16
+    },
+    {
+     "id": "before-line4",
+     "type": "rect",
+     "x": 168,
+     "y": 655,
+     "width": 440,
+     "height": 14,
+     "radius": 7,
+     "fill": "#FFFFFF",
+     "fill_opacity": 0.16
+    },
+    {
+     "id": "before-line5",
+     "type": "rect",
+     "x": 168,
+     "y": 689,
+     "width": 560,
+     "height": 14,
+     "radius": 7,
+     "fill": "#FFFFFF",
+     "fill_opacity": 0.16
+    },
+    {
+     "id": "before-line6",
+     "type": "rect",
+     "x": 168,
+     "y": 723,
+     "width": 480,
+     "height": 14,
+     "radius": 7,
+     "fill": "#FFFFFF",
+     "fill_opacity": 0.16
+    },
+    {
+     "id": "before-line7",
+     "type": "rect",
+     "x": 168,
+     "y": 757,
+     "width": 530,
+     "height": 14,
+     "radius": 7,
+     "fill": "#FFFFFF",
+     "fill_opacity": 0.16
+    },
+    {
+     "id": "before-line8",
+     "type": "rect",
+     "x": 168,
+     "y": 791,
+     "width": 420,
+     "height": 14,
+     "radius": 7,
+     "fill": "#FFFFFF",
+     "fill_opacity": 0.16
+    },
+    {
+     "id": "arrow",
+     "type": "text",
+     "x": 800,
+     "y": 564,
+     "width": 160,
+     "height": 108,
+     "text": "→",
+     "font_size": 80,
+     "font_family": "Arial",
+     "color": "#FF7A3D",
+     "align": "center"
+    },
+    {
+     "id": "after-card",
+     "type": "rect",
+     "x": 960,
+     "y": 371,
+     "width": 840,
+     "height": 487,
+     "radius": 32,
+     "gradient": {
+      "angle": 135,
+      "stops": [
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.1,
+        "at": 0
+       },
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.03,
+        "at": 1
+       }
+      ]
+     },
+     "stroke": "#FF7A3D",
+     "stroke_opacity": 0.55,
+     "stroke_width": 2,
+     "glow": {
+      "color": "#FF7A3D",
+      "opacity": 0.28,
+      "radius": 22
+     }
+    },
+    {
+     "id": "after-label",
+     "type": "text",
+     "x": 1016,
+     "y": 419,
+     "width": 728,
+     "height": 40,
+     "text": "AFTER: ONE CLEAR POINT",
+     "font_size": 30,
+     "font_family": "Arial",
+     "color": "#FF7A3D",
+     "bold": true
+    },
+    {
+     "id": "after-title",
+     "type": "text",
+     "x": 1016,
+     "y": 475,
+     "width": 728,
+     "height": 133,
+     "text": "Launch moves to May 12 to finish testing",
+     "font_size": 52,
+     "font_family": "Georgia",
+     "color": "#EDE7DF",
+     "highlights": [
+      {
+       "text": "May 12",
+       "color": "#FF7A3D"
+      }
+     ]
+    },
+    {
+     "id": "after-dot1",
+     "type": "ellipse",
+     "x": 1016,
+     "y": 654,
+     "width": 14,
+     "height": 14,
+     "fill": "#FF7A3D"
+    },
+    {
+     "id": "after-b1",
+     "type": "text",
+     "x": 1052,
+     "y": 636,
+     "width": 692,
+     "height": 54,
+     "text": "Testing: 80% done",
+     "font_size": 40,
+     "font_family": "Arial",
+     "color": "#EDE7DF",
+     "highlights": [
+      {
+       "text": "Testing:",
+       "bold": true
+      }
+     ]
+    },
+    {
+     "id": "after-dot2",
+     "type": "ellipse",
+     "x": 1016,
+     "y": 716,
+     "width": 14,
+     "height": 14,
+     "fill": "#FF7A3D"
+    },
+    {
+     "id": "after-b2",
+     "type": "text",
+     "x": 1052,
+     "y": 698,
+     "width": 692,
+     "height": 54,
+     "text": "Risk: payment step",
+     "font_size": 40,
+     "font_family": "Arial",
+     "color": "#EDE7DF",
+     "highlights": [
+      {
+       "text": "Risk:",
+       "bold": true
+      }
+     ]
+    },
+    {
+     "id": "after-dot3",
+     "type": "ellipse",
+     "x": 1016,
+     "y": 778,
+     "width": 14,
+     "height": 14,
+     "fill": "#FF7A3D"
+    },
+    {
+     "id": "after-b3",
+     "type": "text",
+     "x": 1052,
+     "y": 760,
+     "width": 692,
+     "height": 54,
+     "text": "Ask: one more tester",
+     "font_size": 40,
+     "font_family": "Arial",
+     "color": "#EDE7DF",
+     "highlights": [
+      {
+       "text": "Ask:",
+       "bold": true
+      }
+     ]
+    },
+    {
+     "id": "aim",
+     "type": "text",
+     "x": 120,
+     "y": 898,
+     "width": 1680,
+     "height": 54,
+     "text": "Aim for about 3 short points. Details go in your speaker notes.",
+     "font_size": 40,
+     "font_family": "Arial",
+     "color": "#EDE7DF",
+     "highlights": [
+      {
+       "text": "3 short points",
+       "color": "#FF7A3D"
+      }
+     ]
+    }
+   ],
+   "notes": "Habit two: cut the text. When a slide is full of sentences, people start reading and stop listening. On the left is the typical first draft: everything we know, in paragraphs. On the right is the same update reduced to one headline and three short phrases. The date and percentage are an invented example. Nothing is lost: the details move into your speaker notes, so you still have them when you speak, or into a handout or email you send afterwards. About three short points per slide is a guideline, not a law. The real goal is that people can take in the slide in a few seconds and then look back at you. With less text on the slide, how do you make what is left easy to see?"
+  },
+  {
+   "id": "s4",
+   "title": "Make it easy to see",
+   "background": "#0E0F12",
+   "elements": [
+    {
+     "id": "label4",
+     "type": "text",
+     "x": 120,
+     "y": 84,
+     "width": 1100,
+     "height": 40,
+     "text": "HABIT 3 OF 4",
+     "font_size": 30,
+     "font_family": "Arial",
+     "color": "#FF7A3D",
+     "bold": true
+    },
+    {
+     "id": "rule4",
+     "type": "line",
+     "x": 120,
+     "y": 136,
+     "width": 420,
+     "height": 0,
+     "stroke": "#FF7A3D",
+     "stroke_width": 2,
+     "stroke_opacity": 0.6
+    },
+    {
+     "id": "title4",
+     "type": "text",
+     "x": 120,
+     "y": 164,
+     "width": 1680,
+     "height": 97,
+     "text": "Make it easy to see from the back",
+     "font_size": 72,
+     "font_family": "Georgia",
+     "color": "#EDE7DF"
+    },
+    {
+     "id": "subtitle4",
+     "type": "text",
+     "x": 120,
+     "y": 273,
+     "width": 1680,
+     "height": 54,
+     "text": "Big text, strong contrast and a consistent layout.",
+     "font_size": 40,
+     "font_family": "Arial",
+     "color": "#A9A39B"
+    },
+    {
+     "id": "col1",
+     "type": "rect",
+     "x": 120,
+     "y": 371,
+     "width": 533,
+     "height": 622,
+     "radius": 32,
+     "gradient": {
+      "angle": 135,
+      "stops": [
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.1,
+        "at": 0
+       },
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.03,
+        "at": 1
+       }
+      ]
+     },
+     "stroke": "#FF7A3D",
+     "stroke_opacity": 0.55,
+     "stroke_width": 2,
+     "glow": {
+      "color": "#FF7A3D",
+      "opacity": 0.28,
+      "radius": 22
+     }
+    },
+    {
+     "id": "col2",
+     "type": "rect",
+     "x": 693,
+     "y": 371,
+     "width": 533,
+     "height": 622,
+     "radius": 32,
+     "gradient": {
+      "angle": 135,
+      "stops": [
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.1,
+        "at": 0
+       },
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.03,
+        "at": 1
+       }
+      ]
+     },
+     "stroke": "#FFFFFF",
+     "stroke_opacity": 0.18,
+     "stroke_width": 2
+    },
+    {
+     "id": "col3",
+     "type": "rect",
+     "x": 1266,
+     "y": 371,
+     "width": 533,
+     "height": 622,
+     "radius": 32,
+     "gradient": {
+      "angle": 135,
+      "stops": [
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.1,
+        "at": 0
+       },
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.03,
+        "at": 1
+       }
+      ]
+     },
+     "stroke": "#FFFFFF",
+     "stroke_opacity": 0.18,
+     "stroke_width": 2
+    },
+    {
+     "id": "col1-head",
+     "type": "text",
+     "x": 168,
+     "y": 415,
+     "width": 437,
+     "height": 65,
+     "text": "Big text",
+     "font_size": 48,
+     "font_family": "Georgia",
+     "color": "#EDE7DF"
+    },
+    {
+     "id": "size-big",
+     "type": "text",
+     "x": 168,
+     "y": 499,
+     "width": 437,
+     "height": 97,
+     "text": "Readable",
+     "font_size": 72,
+     "font_family": "Arial",
+     "color": "#EDE7DF",
+     "bold": true
+    },
+    {
+     "id": "size-small",
+     "type": "text",
+     "x": 168,
+     "y": 603,
+     "width": 437,
+     "height": 30,
+     "text": "Too small to read from far away",
+     "font_size": 22,
+     "font_family": "Arial",
+     "color": "#A9A39B",
+     "ignore_warnings": [
+      "small_text"
+     ]
+    },
+    {
+     "id": "col1-rule",
+     "type": "line",
+     "x": 168,
+     "y": 737,
+     "width": 96,
+     "height": 0,
+     "stroke": "#FF7A3D",
+     "stroke_width": 3
+    },
+    {
+     "id": "col1-tip",
+     "type": "text",
+     "x": 168,
+     "y": 755,
+     "width": 437,
+     "height": 150,
+     "text": "Keep body text at 24 pt or larger. Make titles bigger.",
+     "font_size": 40,
+     "font_family": "Arial",
+     "color": "#EDE7DF",
+     "highlights": [
+      {
+       "text": "24 pt or larger",
+       "color": "#FF7A3D"
+      }
+     ]
+    },
+    {
+     "id": "col2-head",
+     "type": "text",
+     "x": 741,
+     "y": 415,
+     "width": 437,
+     "height": 65,
+     "text": "Strong contrast",
+     "font_size": 48,
+     "font_family": "Georgia",
+     "color": "#EDE7DF"
+    },
+    {
+     "id": "good-swatch",
+     "type": "rect",
+     "x": 741,
+     "y": 499,
+     "width": 437,
+     "height": 72,
+     "radius": 12,
+     "fill": "#EDE7DF"
+    },
+    {
+     "id": "good-text",
+     "type": "text",
+     "x": 765,
+     "y": 513,
+     "width": 389,
+     "height": 49,
+     "text": "Dark vs light: clear",
+     "font_size": 36,
+     "font_family": "Arial",
+     "color": "#0E0F12",
+     "bold": true
+    },
+    {
+     "id": "bad-swatch",
+     "type": "rect",
+     "x": 741,
+     "y": 587,
+     "width": 437,
+     "height": 72,
+     "radius": 12,
+     "fill": "#45484D"
+    },
+    {
+     "id": "bad-text",
+     "type": "text",
+     "x": 765,
+     "y": 601,
+     "width": 389,
+     "height": 49,
+     "text": "Grey on grey: weak",
+     "font_size": 36,
+     "font_family": "Arial",
+     "color": "#5C6066",
+     "bold": true,
+     "ignore_warnings": [
+      "low_contrast"
+     ]
+    },
+    {
+     "id": "col2-rule",
+     "type": "line",
+     "x": 741,
+     "y": 737,
+     "width": 96,
+     "height": 0,
+     "stroke": "#FFFFFF",
+     "stroke_width": 3,
+     "stroke_opacity": 0.35
+    },
+    {
+     "id": "col2-tip",
+     "type": "text",
+     "x": 741,
+     "y": 755,
+     "width": 437,
+     "height": 198,
+     "text": "Avoid text on busy photos. Use color to highlight, not to decorate.",
+     "font_size": 40,
+     "font_family": "Arial",
+     "color": "#EDE7DF"
+    },
+    {
+     "id": "col3-head",
+     "type": "text",
+     "x": 1314,
+     "y": 415,
+     "width": 437,
+     "height": 65,
+     "text": "Same layout",
+     "font_size": 48,
+     "font_family": "Georgia",
+     "color": "#EDE7DF"
+    },
+    {
+     "id": "grid1",
+     "type": "rect",
+     "x": 1314,
+     "y": 499,
+     "width": 210,
+     "height": 116,
+     "radius": 10,
+     "stroke": "#FFFFFF",
+     "stroke_opacity": 0.3,
+     "stroke_width": 2
+    },
+    {
+     "id": "grid1-title",
+     "type": "rect",
+     "x": 1330,
+     "y": 515,
+     "width": 146,
+     "height": 16,
+     "radius": 8,
+     "fill": "#FFFFFF",
+     "fill_opacity": 0.85
+    },
+    {
+     "id": "grid1-line1",
+     "type": "rect",
+     "x": 1330,
+     "y": 551,
+     "width": 162,
+     "height": 10,
+     "radius": 5,
+     "fill": "#FFFFFF",
+     "fill_opacity": 0.25
+    },
+    {
+     "id": "grid1-line2",
+     "type": "rect",
+     "x": 1330,
+     "y": 573,
+     "width": 122,
+     "height": 10,
+     "radius": 5,
+     "fill": "#FFFFFF",
+     "fill_opacity": 0.25
+    },
+    {
+     "id": "grid2",
+     "type": "rect",
+     "x": 1540,
+     "y": 499,
+     "width": 210,
+     "height": 116,
+     "radius": 10,
+     "stroke": "#FFFFFF",
+     "stroke_opacity": 0.3,
+     "stroke_width": 2
+    },
+    {
+     "id": "grid2-title",
+     "type": "rect",
+     "x": 1556,
+     "y": 515,
+     "width": 146,
+     "height": 16,
+     "radius": 8,
+     "fill": "#FFFFFF",
+     "fill_opacity": 0.85
+    },
+    {
+     "id": "grid2-line1",
+     "type": "rect",
+     "x": 1556,
+     "y": 551,
+     "width": 162,
+     "height": 10,
+     "radius": 5,
+     "fill": "#FFFFFF",
+     "fill_opacity": 0.25
+    },
+    {
+     "id": "grid2-line2",
+     "type": "rect",
+     "x": 1556,
+     "y": 573,
+     "width": 122,
+     "height": 10,
+     "radius": 5,
+     "fill": "#FFFFFF",
+     "fill_opacity": 0.25
+    },
+    {
+     "id": "grid-caption",
+     "type": "text",
+     "x": 1314,
+     "y": 627,
+     "width": 437,
+     "height": 92,
+     "text": "Titles always in the same spot",
+     "font_size": 36,
+     "font_family": "Arial",
+     "color": "#A9A39B"
+    },
+    {
+     "id": "col3-rule",
+     "type": "line",
+     "x": 1314,
+     "y": 737,
+     "width": 96,
+     "height": 0,
+     "stroke": "#FFFFFF",
+     "stroke_width": 3,
+     "stroke_opacity": 0.35
+    },
+    {
+     "id": "col3-tip",
+     "type": "text",
+     "x": 1314,
+     "y": 755,
+     "width": 437,
+     "height": 150,
+     "text": "One font, two or three colors, and aligned edges on every slide.",
+     "font_size": 40,
+     "font_family": "Arial",
+     "color": "#EDE7DF"
+    }
+   ],
+   "notes": "Habit three: design for the person in the last row, or the colleague watching on a small laptop screen in a video call. Big text: a common rule of thumb is to keep body text at 24 points or larger. If you need smaller text to fit everything, that is a sign to cut or split the slide. Notice the small grey line in the first column: that is what tiny text looks like from the back. Strong contrast: dark text on a light background, or light on dark. Grey on grey and text over busy photos are hard to read, especially on projectors. Same layout: pick one font and two or three colors, and keep titles in the same place on every slide. Consistency lets people stop noticing the design and focus on the content. If your company has a slide template, use it; it already solves most of this. Last question: how do you know the deck is ready?"
+  },
+  {
+   "id": "s5",
+   "title": "Check before you present",
+   "background": "#0E0F12",
+   "elements": [
+    {
+     "id": "label5",
+     "type": "text",
+     "x": 120,
+     "y": 84,
+     "width": 1100,
+     "height": 40,
+     "text": "HABIT 4 OF 4",
+     "font_size": 30,
+     "font_family": "Arial",
+     "color": "#FF7A3D",
+     "bold": true
+    },
+    {
+     "id": "rule5",
+     "type": "line",
+     "x": 120,
+     "y": 136,
+     "width": 420,
+     "height": 0,
+     "stroke": "#FF7A3D",
+     "stroke_width": 2,
+     "stroke_opacity": 0.6
+    },
+    {
+     "id": "title5",
+     "type": "text",
+     "x": 120,
+     "y": 164,
+     "width": 1680,
+     "height": 97,
+     "text": "Check before you present",
+     "font_size": 72,
+     "font_family": "Georgia",
+     "color": "#EDE7DF"
+    },
+    {
+     "id": "subtitle5",
+     "type": "text",
+     "x": 120,
+     "y": 273,
+     "width": 1680,
+     "height": 54,
+     "text": "A five-minute check catches the most common problems.",
+     "font_size": 40,
+     "font_family": "Arial",
+     "color": "#A9A39B"
+    },
+    {
+     "id": "check-card",
+     "type": "rect",
+     "x": 120,
+     "y": 371,
+     "width": 1680,
+     "height": 480,
+     "radius": 32,
+     "gradient": {
+      "angle": 135,
+      "stops": [
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.1,
+        "at": 0
+       },
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.03,
+        "at": 1
+       }
+      ]
+     },
+     "stroke": "#FFFFFF",
+     "stroke_opacity": 0.18,
+     "stroke_width": 2
+    },
+    {
+     "id": "check-no1-box",
+     "type": "rect",
+     "x": 168,
+     "y": 405,
+     "width": 84,
+     "height": 56,
+     "radius": 14,
+     "stroke": "#FF7A3D",
+     "stroke_opacity": 0.8,
+     "stroke_width": 2
+    },
+    {
+     "id": "check-no1",
+     "type": "text",
+     "x": 168,
+     "y": 413,
+     "width": 84,
+     "height": 40,
+     "text": "01",
+     "font_size": 30,
+     "font_family": "Arial",
+     "color": "#FF7A3D",
+     "bold": true,
+     "align": "center"
+    },
+    {
+     "id": "check1",
+     "type": "text",
+     "x": 288,
+     "y": 409,
+     "width": 1464,
+     "height": 54,
+     "text": "Each title states one message",
+     "font_size": 40,
+     "font_family": "Arial",
+     "color": "#EDE7DF"
+    },
+    {
+     "id": "check-sep2",
+     "type": "line",
+     "x": 168,
+     "y": 477,
+     "width": 1584,
+     "height": 0,
+     "stroke": "#FFFFFF",
+     "stroke_width": 2,
+     "stroke_opacity": 0.08
+    },
+    {
+     "id": "check-no2-box",
+     "type": "rect",
+     "x": 168,
+     "y": 493,
+     "width": 84,
+     "height": 56,
+     "radius": 14,
+     "stroke": "#FF7A3D",
+     "stroke_opacity": 0.8,
+     "stroke_width": 2
+    },
+    {
+     "id": "check-no2",
+     "type": "text",
+     "x": 168,
+     "y": 501,
+     "width": 84,
+     "height": 40,
+     "text": "02",
+     "font_size": 30,
+     "font_family": "Arial",
+     "color": "#FF7A3D",
+     "bold": true,
+     "align": "center"
+    },
+    {
+     "id": "check2",
+     "type": "text",
+     "x": 288,
+     "y": 497,
+     "width": 1464,
+     "height": 54,
+     "text": "About 3 short points per slide, details in notes",
+     "font_size": 40,
+     "font_family": "Arial",
+     "color": "#EDE7DF"
+    },
+    {
+     "id": "check-sep3",
+     "type": "line",
+     "x": 168,
+     "y": 565,
+     "width": 1584,
+     "height": 0,
+     "stroke": "#FFFFFF",
+     "stroke_width": 2,
+     "stroke_opacity": 0.08
+    },
+    {
+     "id": "check-no3-box",
+     "type": "rect",
+     "x": 168,
+     "y": 581,
+     "width": 84,
+     "height": 56,
+     "radius": 14,
+     "stroke": "#FF7A3D",
+     "stroke_opacity": 0.8,
+     "stroke_width": 2
+    },
+    {
+     "id": "check-no3",
+     "type": "text",
+     "x": 168,
+     "y": 589,
+     "width": 84,
+     "height": 40,
+     "text": "03",
+     "font_size": 30,
+     "font_family": "Arial",
+     "color": "#FF7A3D",
+     "bold": true,
+     "align": "center"
+    },
+    {
+     "id": "check3",
+     "type": "text",
+     "x": 288,
+     "y": 585,
+     "width": 1464,
+     "height": 54,
+     "text": "Text is readable at full screen from a few steps back",
+     "font_size": 40,
+     "font_family": "Arial",
+     "color": "#EDE7DF"
+    },
+    {
+     "id": "check-sep4",
+     "type": "line",
+     "x": 168,
+     "y": 653,
+     "width": 1584,
+     "height": 0,
+     "stroke": "#FFFFFF",
+     "stroke_width": 2,
+     "stroke_opacity": 0.08
+    },
+    {
+     "id": "check-no4-box",
+     "type": "rect",
+     "x": 168,
+     "y": 669,
+     "width": 84,
+     "height": 56,
+     "radius": 14,
+     "stroke": "#FF7A3D",
+     "stroke_opacity": 0.8,
+     "stroke_width": 2
+    },
+    {
+     "id": "check-no4",
+     "type": "text",
+     "x": 168,
+     "y": 677,
+     "width": 84,
+     "height": 40,
+     "text": "04",
+     "font_size": 30,
+     "font_family": "Arial",
+     "color": "#FF7A3D",
+     "bold": true,
+     "align": "center"
+    },
+    {
+     "id": "check4",
+     "type": "text",
+     "x": 288,
+     "y": 673,
+     "width": 1464,
+     "height": 54,
+     "text": "One font, two or three colors, aligned layout",
+     "font_size": 40,
+     "font_family": "Arial",
+     "color": "#EDE7DF"
+    },
+    {
+     "id": "check-sep5",
+     "type": "line",
+     "x": 168,
+     "y": 741,
+     "width": 1584,
+     "height": 0,
+     "stroke": "#FFFFFF",
+     "stroke_width": 2,
+     "stroke_opacity": 0.08
+    },
+    {
+     "id": "check-no5-box",
+     "type": "rect",
+     "x": 168,
+     "y": 757,
+     "width": 84,
+     "height": 56,
+     "radius": 14,
+     "stroke": "#FF7A3D",
+     "stroke_opacity": 0.8,
+     "stroke_width": 2
+    },
+    {
+     "id": "check-no5",
+     "type": "text",
+     "x": 168,
+     "y": 765,
+     "width": 84,
+     "height": 40,
+     "text": "05",
+     "font_size": 30,
+     "font_family": "Arial",
+     "color": "#FF7A3D",
+     "bold": true,
+     "align": "center"
+    },
+    {
+     "id": "check5",
+     "type": "text",
+     "x": 288,
+     "y": 761,
+     "width": 1464,
+     "height": 54,
+     "text": "Practice out loud at least once, with a timer",
+     "font_size": 40,
+     "font_family": "Arial",
+     "color": "#EDE7DF"
+    }
+   ],
+   "notes": "Habit four: before the meeting, run through this five-point list. First, read your titles in order: does each one state a single message? Second, scan for text-heavy slides and move the details into your notes. Third, show the deck at full screen and step back from your monitor, or ask a colleague, to check it can be read. Fourth, check that fonts, colors and title positions are consistent. Finally, practice out loud at least once with a timer. Saying it aloud shows you where slides are unclear and whether you fit your time slot. So what do the four habits add up to?"
+  },
+  {
+   "id": "s6",
+   "title": "Summary",
+   "background": "#0E0F12",
+   "elements": [
+    {
+     "id": "label6",
+     "type": "text",
+     "x": 120,
+     "y": 84,
+     "width": 1100,
+     "height": 40,
+     "text": "SUMMARY",
+     "font_size": 30,
+     "font_family": "Arial",
+     "color": "#FF7A3D",
+     "bold": true
+    },
+    {
+     "id": "rule6",
+     "type": "line",
+     "x": 120,
+     "y": 136,
+     "width": 420,
+     "height": 0,
+     "stroke": "#FF7A3D",
+     "stroke_width": 2,
+     "stroke_opacity": 0.6
+    },
+    {
+     "id": "title6",
+     "type": "text",
+     "x": 120,
+     "y": 164,
+     "width": 1680,
+     "height": 97,
+     "text": "Your slides support you",
+     "font_size": 72,
+     "font_family": "Georgia",
+     "color": "#EDE7DF",
+     "highlights": [
+      {
+       "text": "support you",
+       "color": "#FF7A3D"
+      }
+     ]
+    },
+    {
+     "id": "subtitle6",
+     "type": "text",
+     "x": 120,
+     "y": 273,
+     "width": 1680,
+     "height": 54,
+     "text": "Four habits, one action each.",
+     "font_size": 40,
+     "font_family": "Arial",
+     "color": "#A9A39B"
+    },
+    {
+     "id": "sum-card1",
+     "type": "rect",
+     "x": 120,
+     "y": 371,
+     "width": 820,
+     "height": 210,
+     "radius": 32,
+     "gradient": {
+      "angle": 135,
+      "stops": [
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.1,
+        "at": 0
+       },
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.03,
+        "at": 1
+       }
+      ]
+     },
+     "stroke": "#FFFFFF",
+     "stroke_opacity": 0.18,
+     "stroke_width": 2
+    },
+    {
+     "id": "sum-card2",
+     "type": "rect",
+     "x": 980,
+     "y": 371,
+     "width": 820,
+     "height": 210,
+     "radius": 32,
+     "gradient": {
+      "angle": 135,
+      "stops": [
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.1,
+        "at": 0
+       },
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.03,
+        "at": 1
+       }
+      ]
+     },
+     "stroke": "#FFFFFF",
+     "stroke_opacity": 0.18,
+     "stroke_width": 2
+    },
+    {
+     "id": "sum-card3",
+     "type": "rect",
+     "x": 120,
+     "y": 613,
+     "width": 820,
+     "height": 210,
+     "radius": 32,
+     "gradient": {
+      "angle": 135,
+      "stops": [
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.1,
+        "at": 0
+       },
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.03,
+        "at": 1
+       }
+      ]
+     },
+     "stroke": "#FFFFFF",
+     "stroke_opacity": 0.18,
+     "stroke_width": 2
+    },
+    {
+     "id": "sum-card4",
+     "type": "rect",
+     "x": 980,
+     "y": 613,
+     "width": 820,
+     "height": 210,
+     "radius": 32,
+     "gradient": {
+      "angle": 135,
+      "stops": [
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.1,
+        "at": 0
+       },
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.03,
+        "at": 1
+       }
+      ]
+     },
+     "stroke": "#FFFFFF",
+     "stroke_opacity": 0.18,
+     "stroke_width": 2
+    },
+    {
+     "id": "sum-no1-box",
+     "type": "rect",
+     "x": 160,
+     "y": 407,
+     "width": 84,
+     "height": 56,
+     "radius": 14,
+     "stroke": "#FF7A3D",
+     "stroke_opacity": 0.8,
+     "stroke_width": 2
+    },
+    {
+     "id": "sum-no1",
+     "type": "text",
+     "x": 160,
+     "y": 415,
+     "width": 84,
+     "height": 40,
+     "text": "01",
+     "font_size": 30,
+     "font_family": "Arial",
+     "color": "#FF7A3D",
+     "bold": true,
+     "align": "center"
+    },
+    {
+     "id": "sum-habit1",
+     "type": "text",
+     "x": 268,
+     "y": 409,
+     "width": 632,
+     "height": 54,
+     "text": "One message per slide",
+     "font_size": 40,
+     "font_family": "Georgia",
+     "color": "#EDE7DF",
+     "ignore_warnings": [
+      "repeated_text"
+     ]
+    },
+    {
+     "id": "sum-action1",
+     "type": "text",
+     "x": 160,
+     "y": 491,
+     "width": 740,
+     "height": 54,
+     "text": "Write each title as the point.",
+     "font_size": 40,
+     "font_family": "Arial",
+     "color": "#A9A39B"
+    },
+    {
+     "id": "sum-no2-box",
+     "type": "rect",
+     "x": 1020,
+     "y": 407,
+     "width": 84,
+     "height": 56,
+     "radius": 14,
+     "stroke": "#FF7A3D",
+     "stroke_opacity": 0.8,
+     "stroke_width": 2
+    },
+    {
+     "id": "sum-no2",
+     "type": "text",
+     "x": 1020,
+     "y": 415,
+     "width": 84,
+     "height": 40,
+     "text": "02",
+     "font_size": 30,
+     "font_family": "Arial",
+     "color": "#FF7A3D",
+     "bold": true,
+     "align": "center"
+    },
+    {
+     "id": "sum-habit2",
+     "type": "text",
+     "x": 1128,
+     "y": 409,
+     "width": 632,
+     "height": 54,
+     "text": "Less text, more meaning",
+     "font_size": 40,
+     "font_family": "Georgia",
+     "color": "#EDE7DF",
+     "ignore_warnings": [
+      "repeated_text"
+     ]
+    },
+    {
+     "id": "sum-action2",
+     "type": "text",
+     "x": 1020,
+     "y": 491,
+     "width": 740,
+     "height": 54,
+     "text": "About 3 short points per slide.",
+     "font_size": 40,
+     "font_family": "Arial",
+     "color": "#A9A39B"
+    },
+    {
+     "id": "sum-no3-box",
+     "type": "rect",
+     "x": 160,
+     "y": 649,
+     "width": 84,
+     "height": 56,
+     "radius": 14,
+     "stroke": "#FF7A3D",
+     "stroke_opacity": 0.8,
+     "stroke_width": 2
+    },
+    {
+     "id": "sum-no3",
+     "type": "text",
+     "x": 160,
+     "y": 657,
+     "width": 84,
+     "height": 40,
+     "text": "03",
+     "font_size": 30,
+     "font_family": "Arial",
+     "color": "#FF7A3D",
+     "bold": true,
+     "align": "center"
+    },
+    {
+     "id": "sum-habit3",
+     "type": "text",
+     "x": 268,
+     "y": 651,
+     "width": 632,
+     "height": 54,
+     "text": "Easy to see from the back",
+     "font_size": 40,
+     "font_family": "Georgia",
+     "color": "#EDE7DF",
+     "ignore_warnings": [
+      "repeated_text"
+     ]
+    },
+    {
+     "id": "sum-action3",
+     "type": "text",
+     "x": 160,
+     "y": 733,
+     "width": 740,
+     "height": 54,
+     "text": "Big text, contrast, one layout.",
+     "font_size": 40,
+     "font_family": "Arial",
+     "color": "#A9A39B"
+    },
+    {
+     "id": "sum-no4-box",
+     "type": "rect",
+     "x": 1020,
+     "y": 649,
+     "width": 84,
+     "height": 56,
+     "radius": 14,
+     "stroke": "#FF7A3D",
+     "stroke_opacity": 0.8,
+     "stroke_width": 2
+    },
+    {
+     "id": "sum-no4",
+     "type": "text",
+     "x": 1020,
+     "y": 657,
+     "width": 84,
+     "height": 40,
+     "text": "04",
+     "font_size": 30,
+     "font_family": "Arial",
+     "color": "#FF7A3D",
+     "bold": true,
+     "align": "center"
+    },
+    {
+     "id": "sum-habit4",
+     "type": "text",
+     "x": 1128,
+     "y": 651,
+     "width": 632,
+     "height": 54,
+     "text": "Check before you present",
+     "font_size": 40,
+     "font_family": "Georgia",
+     "color": "#EDE7DF",
+     "ignore_warnings": [
+      "repeated_text"
+     ]
+    },
+    {
+     "id": "sum-action4",
+     "type": "text",
+     "x": 1020,
+     "y": 733,
+     "width": 740,
+     "height": 54,
+     "text": "Run the check; practice out loud.",
+     "font_size": 40,
+     "font_family": "Arial",
+     "color": "#A9A39B"
+    },
+    {
+     "id": "close-card",
+     "type": "rect",
+     "x": 120,
+     "y": 855,
+     "width": 1680,
+     "height": 117,
+     "radius": 32,
+     "gradient": {
+      "angle": 135,
+      "stops": [
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.1,
+        "at": 0
+       },
+       {
+        "color": "#FFFFFF",
+        "opacity": 0.03,
+        "at": 1
+       }
+      ]
+     },
+     "stroke": "#FF7A3D",
+     "stroke_opacity": 0.55,
+     "stroke_width": 2,
+     "glow": {
+      "color": "#FF7A3D",
+      "opacity": 0.28,
+      "radius": 22
+     }
+    },
+    {
+     "id": "close",
+     "type": "text",
+     "x": 168,
+     "y": 883,
+     "width": 1584,
+     "height": 65,
+     "text": "Clear slides + a practiced story = a confident first presentation.",
+     "font_size": 48,
+     "font_family": "Georgia",
+     "color": "#EDE7DF",
+     "highlights": [
+      {
+       "text": "a confident first presentation",
+       "color": "#FF7A3D"
+      }
+     ]
+    }
+   ],
+   "notes": "To sum up the four habits: one message per slide, so each title states your point; about three short points, with the details in your notes; big text, strong contrast and the same layout, so the last row can read it; and a five-minute check before you present, including one practice out loud. Remember the speaker who read every slide aloud? Clear slides plus a practiced story is what makes a first presentation feel confident, and that speaker will not be you. Thank you, and good luck."
+  }
+ ]
+}

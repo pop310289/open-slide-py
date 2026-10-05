@@ -1,55 +1,57 @@
-# 製作與版面
+# Authoring and layout
 
-每頁先定義讀者應理解的一句論點，再選能說明它的原生文字、形狀、線段或圖片。資料圖的數字、單位、期間與來源需可核對；新的研究結論應查一手來源，勿繼承示範中的評分或效能承諾。
+For each slide, first define the one point the reader should understand, then choose native text, shapes, lines or images that explain it. Numbers, units, periods and sources in data charts must be checkable; for new research findings, check the primary source rather than inheriting scores or performance claims from the examples.
 
-## 故事線
+## Storyline
 
-動手排版前先寫故事線：
+Write the storyline before laying anything out:
 
-1. 每頁標題是一行的短結論：英文約 8 個字、中文約 16 個字以內，寫結論，不寫主題名（「Q3 業績因新客戶成長」，不是「Q3 業績」）。只讀標題要聽得出主線；故事的細節靠頁序、轉場與講者備註來講，不要寫進標題。封面以外的標題換行就刪字。
-2. 開場要有 hook：第一頁先放一個聽眾有共鳴的問題、反差或具體情境，接著的主張就是答案；不用「Welcome」或目錄開場。最後一頁或它的備註要回扣這個 hook。
-3. 選一種結構：依序回答讀者心裡的問題，或「問題 → 轉折 → 解法 → 證據 → 行動」。中間要有一個讀者沒想到的轉折，也要誠實講一個限制。
-4. 用同一個例子貫穿全場。時間順序要一致，有跳躍就在投影片上講清楚，不能只寫在備註。
-5. 頁與頁要接：每頁備註的結尾用一個問題帶出下一頁要回答的事。
-6. 收尾：最後一頁做總結，回顧開頭列出的重點，每個重點配一個能帶走的動作，標題或備註回扣開場的 hook；不要只放「Summary」或「Thank you」，也不要逐字重複前面的頁面。
-7. 對調檢查：中間幾頁若可任意對調而不影響理解，那是清單不是故事；重排頁序，讓每頁用到上一頁的結果。
+1. Each slide title is a one-line conclusion: at most about 8 English words or 16 Chinese characters (a rule of thumb; adjust to the topic). Write the conclusion, not the topic ("Q3 sales grew because of new clients", not "Q3 sales"). The titles alone should carry the main line; the details of the story go into the slide order, transitions and speaker notes, not into the titles. Outside the cover, a title that wraps needs cutting.
+2. Open with a hook: the first slide starts with a question, contrast or concrete situation the audience recognises, so the main claim that follows answers it; do not open with "Welcome" or an agenda. The last slide or its notes call back to the hook.
+3. Choose one structure: answer the reader's questions in order, or "problem → turn → solution → evidence → action". Include one turn the reader did not expect, and state one limitation honestly.
+4. Carry one example through the whole deck. Keep the timeline consistent; if it jumps, say so on the slide, not only in the notes.
+5. Link the slides: end each slide's notes with a question that the next slide answers.
+6. Close: the last slide summarises the points listed at the start, with one takeaway action per point, and its title or notes call back to the opening hook. Do not end on a bare "Summary" or "Thank you", and do not repeat earlier slides word for word.
+7. Swap test: if the middle slides could be swapped without losing anything, you have a list, not a story; reorder them so that each slide uses the result of the one before.
 
-## 字數
+## Word budget
 
-- 每頁除了標題約 3 個短重點；清單頁可以多，但每項一行。能用片語就不用完整句子。
-- 推理、細節與數字的來源放講者備註，投影片只留聽眾要記住的部分。
-- 同一句話不在兩頁重複；頁尾那一句只用來加新東西（檢查方法、規則），不重述標題。
-- 放不下時刪字或拆頁，不要縮小字級。
+- About three short points per slide besides the title; a checklist slide may have more, one line each. Prefer phrases to full sentences.
+- Reasoning, details and the sources of numbers go into the speaker notes; the slide keeps only what the audience should remember.
+- Do not repeat a sentence on two slides; a footer line should add something new (a test, a rule), not restate the title. `validate` warns about sentences below 18 pt and sentences repeated across slides.
+- When it does not fit, cut words or split the slide; do not shrink the font.
 
-## 重點卡片與強調
+## Key-point cards and emphasis
 
-- 一頁有 2–4 個並列重點時用卡片：一張卡一個重點，最多四張，大小與間距一致。
-- 卡片內由上而下：編號小標（01、02）→ 一句話的大標 → 短的強調色底線 → 一到兩行說明；圖示或插圖放在一側。
-- 深色背景的玻璃卡片：rect 用白色底、`fill_opacity` 0.04–0.08，細邊框 `stroke_opacity` 0.15–0.3，`radius` 24–40，可加由左上往右下變淡的 `gradient`；只有最重要的那張加 `glow`。欄位見[場景與 API](scene.md)的「樣式」。
-- 淺色背景的卡片：白底上的白色半透明會看不見，改用白色到淺灰（約 `#F3F3F5`）的 `gradient`、深色細邊框（`stroke_opacity` 0.1–0.15）與淡 `shadow`（不透明度約 0.1）；焦點卡片用強調色邊框，光暈要淡（約 0.15）。
-- 強調只給真正的關鍵字：用 `highlights` 把一兩個片語換成強調色，不要整句換色；一頁最多一個大數字；同一份簡報只用一種強調色。
-- 文字與卡片保持原生、可編輯；插圖、3D 標誌、背景紋理才用圖片，並保留 alt 與來源。
+- Use cards for 2–4 parallel points on a slide: one point per card, at most four, all the same size and spacing.
+- Inside a card, top to bottom: a numbered label (01, 02) → a one-sentence heading → a short accent-coloured rule → one or two lines of explanation; icons or illustrations go to one side.
+- Glass cards on a dark background: a rect with a white fill at `fill_opacity` 0.04–0.08, a thin border at `stroke_opacity` 0.15–0.3 and a `radius` of 24–40, optionally with a `gradient` fading from top left to bottom right; only the most important card gets a `glow`. The fields are under "Styles" in [Scene and API](scene.md).
+- Cards on a light background: translucent white disappears on white, so use a white-to-light-grey (about `#F3F3F5`) `gradient`, a thin dark border (`stroke_opacity` 0.1–0.15) and a soft `shadow` (opacity about 0.1); the focal card gets an accent border and a faint glow (about 0.15).
+- Emphasise only the real key words: use `highlights` to colour one or two phrases, never a whole sentence; at most one big number per slide; one accent colour per deck.
+- Keep text and cards native and editable; use images only for illustrations, 3D logos and background textures, with alt text and sources.
 
-## 配色
+## Colour
 
-- 顏色當參數：產生 JSON 的程式先定一張配色表（背景、主文字、次要文字、強調色、線條與框用的中性色、卡片漸層與邊框、陰影、焦點卡片的邊框與光暈），元素只引用表裡的角色、不寫死色碼；換風格只換表、重產 JSON。
-- 文字色與背景、卡片底色的對比至少 4.5:1，強調色拿來當文字時也一樣；刻意示範「對比不足」的元素例外。
-- 驗證過的兩組配色（2026-10 同一份 6 頁簡報）：
+- Colour is a parameter: the program that writes the JSON first defines one palette (background, main text, secondary text, accent, a neutral colour for lines and borders, card gradient and border, shadow, and the focal card's border and glow), and elements refer only to its roles, never to literal colours; a new style is a new palette and a regenerated JSON. `THEMES` in `open_slide_py/kit.py` is that palette and `Kit("light-red")` applies it; when you add a palette, the tests check its text contrast.
+- Text, accent text included, keeps at least 4.5:1 contrast with the background and with card fills; only deliberate "low contrast" examples are exempt.
+- Two tested palettes (the same six-slide deck, October 2026):
 
-| 角色 | 橘黑（深色） | 白紅（淺色） |
+| Role | Dark orange | White red |
 |---|---|---|
-| 背景 | `#0E0F12` | `#FFFFFF` |
-| 主文字 | `#EDE7DF`（15.6:1） | `#1B1B1F`（17.2:1） |
-| 次要文字 | `#A9A39B`（7.7:1） | `#5F6368`（6.0:1） |
-| 強調色 | `#FF7A3D`（7.4:1） | `#D0202E`（白底 5.3:1、卡片 4.8:1） |
-| 中性色（線條、框） | `#FFFFFF` | `#1B1B1F` |
-| 卡片 | 白色漸層 0.10→0.03、框 0.18、無陰影 | `#FFFFFF`→`#F3F3F5`、框 0.12、陰影 0.10 |
-| 焦點卡片 | 框 0.55、光暈 0.28 | 框 0.7、光暈 0.16 |
+| Background | `#0E0F12` | `#FFFFFF` |
+| Main text | `#EDE7DF` (15.6:1) | `#1B1B1F` (17.2:1) |
+| Secondary text | `#A9A39B` (7.7:1) | `#5F6368` (6.0:1) |
+| Accent | `#FF7A3D` (7.4:1) | `#D0202E` (5.3:1 on white, 4.8:1 on cards) |
+| Neutral (lines, borders) | `#FFFFFF` | `#1B1B1F` |
+| Card | white gradient 0.10→0.03, border 0.18, no shadow | `#FFFFFF`→`#F3F3F5`, border 0.12, shadow 0.10 |
+| Focal card | border 0.55, glow 0.28 | border 0.7, glow 0.16 |
 
-## 版面
+## Layout
 
-採一致的畫布、邊距、字級層次與色彩角色。標準 1920×1080 畫布的字級以像素表示，PPTX 換算為半數 pt；例如 40px 為 20pt。投影用註腳須在實際播放尺寸閱讀，不能只靠縮圖或模型字寬估計驗收。文字框預留行高，避免貼邊；圖解標註應靠近對應線段或結構。
+Write generators with `open_slide_py/kit.py`: text boxes are sized from real font widths, and cards, number badges, headers and bar charts follow the palette; see `examples/build_good_slides.py`. Afterwards check with `kit.check` (text leaving its card, elements past the margins) and `validate`.
 
-以原生文字與圖形保留可編輯性。量化圖表可用矩形、線段及文字組成；圖片適合主視覺、照片與真實截圖，不用整頁圖片取代文字及資料。圖片素材必須放在 JSON 目錄內，並保留 alt、授權與來源。
+Use one canvas, margins, type scale and set of colour roles throughout. On the standard 1920×1080 canvas, font sizes are in pixels and PPTX uses half as many points: 40 px is 20 pt. Footnotes meant for projection must be read at the real playback size; thumbnails and estimated widths are not enough. Leave room for line height in text boxes and keep text off the edges; put diagram labels next to the lines or structures they describe.
 
-編輯既有 deck 時保留 slide/element id、內部連結和備註的關係。若加頁或改圖，重新檢查相關連結、講者備註及相鄰頁敘事。例子只示範格式，不能當成跨平台或應用程式驗收證据。
+Keep the deck editable with native text and shapes. Quantitative charts can be built from rectangles, lines and text; images suit key visuals, photos and real screenshots, but never replace text and data with a whole-slide image. Image assets must live in the JSON's folder, with alt text, licence and source.
+
+When editing an existing deck, keep slide and element ids, internal links and their relation to the notes. After adding slides or changing figures, recheck the related links, speaker notes and the story of the neighbouring slides. The examples only demonstrate the format; they are not evidence for cross-platform or application acceptance.

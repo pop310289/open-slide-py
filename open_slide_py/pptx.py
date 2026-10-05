@@ -12,7 +12,7 @@ from xml.sax.saxutils import escape
 import zipfile
 
 from .export import write_atomic
-from .model import DEFAULT_TEXT_COLOR, GLOW_FIELDS, SHADOW_FIELDS, assert_valid, pptx_language, resolve_image, styled_lines
+from .model import DEFAULT_TEXT_COLOR, GLOW_FIELDS, SHADOW_FIELDS, assert_valid, pptx_language, resolve_image, styled_lines, styled_paragraphs
 from .fonts import document_fonts, element_fonts
 
 NS_A = "http://schemas.openxmlformats.org/drawingml/2006/main"
@@ -89,7 +89,7 @@ def _rels(entries):
     return DECL + f'<Relationships xmlns="{NS_REL}">{"".join(items)}</Relationships>'
 
 
-def _text_body(element, lang):
+def _text_body(element, lang, reflow=True):
     size = element.get("font_size", 48)
     font, east_asian_font = map(_e, element_fonts(element))
     font_xml = f'<a:latin typeface="{font}"/><a:ea typeface="{east_asian_font}"/><a:cs typeface="{font}"/>'
@@ -104,16 +104,17 @@ def _text_body(element, lang):
 
     base_color, base_bold = element.get("color", DEFAULT_TEXT_COLOR), element.get("bold", False)
     paragraphs = []
-    for runs in styled_lines(element):
+    for runs in (styled_paragraphs(element) if reflow else styled_lines(element)):
         alignment = {"left": "l", "center": "ctr", "right": "r"}[element.get("align", "left")]
         properties = f'<a:pPr algn="{alignment}" marL="0" marR="0" indent="0"><a:lnSpc><a:spcPts val="{round(size * 60)}"/></a:lnSpc><a:spcBef><a:spcPts val="0"/></a:spcBef><a:spcAft><a:spcPts val="0"/></a:spcAft><a:buNone/></a:pPr>'
         text_runs = "".join(f'<a:r><a:rPr {attrs(bold)}>{style(color)}</a:rPr><a:t xml:space="preserve">{_e(part)}</a:t></a:r>'
                             for part, color, bold in runs)
         paragraphs.append(f'<a:p>{properties}{text_runs}<a:endParaRPr {attrs(base_bold)}>{style(base_color)}</a:endParaRPr></a:p>')
-    return '<p:txBody><a:bodyPr wrap="none" lIns="0" tIns="0" rIns="0" bIns="0" anchor="t"><a:noAutofit/></a:bodyPr><a:lstStyle/>' + ''.join(paragraphs) + '</p:txBody>'
+    wrap = "square" if reflow else "none"  # square: PowerPoint re-wraps edited text; none: keep the SVG/HTML line breaks
+    return f'<p:txBody><a:bodyPr wrap="{wrap}" lIns="0" tIns="0" rIns="0" bIns="0" anchor="t"><a:noAutofit/></a:bodyPr><a:lstStyle/>' + ''.join(paragraphs) + '</p:txBody>'
 
 
-def _shape(element, shape_id, hyperlink="", image_rid=None, lang="zh-TW"):
+def _shape(element, shape_id, hyperlink="", image_rid=None, lang="zh-TW", reflow=True):
     kind = element["type"]
     properties = f'<p:cNvPr id="{shape_id}" name="{_e(element["id"])}" descr="{_e(element.get("alt", ""))}">{hyperlink}</p:cNvPr>'
     geometry = {"text": "rect", "rect": "rect", "ellipse": "ellipse", "line": "line", "image": "rect"}[kind]
@@ -128,7 +129,7 @@ def _shape(element, shape_id, hyperlink="", image_rid=None, lang="zh-TW"):
         alpha = f'<a:alphaModFix amt="{round(opacity * 100000)}"/>' if opacity < 1 else ""
         return f'<p:pic><p:nvPicPr>{properties}<p:cNvPicPr><a:picLocks noChangeAspect="1"/></p:cNvPicPr><p:nvPr/></p:nvPicPr><p:blipFill><a:blip r:embed="{image_rid}">{alpha}</a:blip><a:stretch><a:fillRect/></a:stretch></p:blipFill><p:spPr>{geometric}{_outline(element)}{_effects(element)}</p:spPr></p:pic>'
     txbox = ' txBox="1"' if kind == "text" else ""
-    body = _text_body(element, lang) if kind == "text" else ""
+    body = _text_body(element, lang, reflow) if kind == "text" else ""
     return f'<p:sp><p:nvSpPr>{properties}<p:cNvSpPr{txbox}/><p:nvPr/></p:nvSpPr><p:spPr>{geometric}{_shape_fill(element)}{_outline(element)}{_effects(element)}</p:spPr>{body}</p:sp>'
 
 
@@ -158,7 +159,7 @@ def _notes(text, font_pair, lang):
     return DECL + f'<p:notes {NAMESPACES}><p:cSld><p:spTree>{GROUP}{body}</p:spTree></p:cSld><p:clrMapOvr><a:masterClrMapping/></p:clrMapOvr></p:notes>'
 
 
-def build_pptx_parts(deck, base_dir=None):
+def build_pptx_parts(deck, base_dir=None, reflow=True):
     """Return every OPC part; useful for inspection and independent testing."""
     assert_valid(deck, base_dir)
     if any(not 144 <= deck[axis] <= 8064 for axis in ("width", "height")):
@@ -246,7 +247,7 @@ def build_pptx_parts(deck, base_dir=None):
                     image_extensions.add((extension, mime))
                     add("ppt/media/" + name, payload)
                 image_rid = relationship("image", "../media/" + image_names[digest])
-            shapes.append(_shape(element, element_index, hyperlink, image_rid, lang))
+            shapes.append(_shape(element, element_index, hyperlink, image_rid, lang, reflow))
         background = _fill(slide.get("background", "#FFFFFF"))
         slide_xml = f'<p:sld {NAMESPACES}><p:cSld name="{_e(slide.get("title", ""))}"><p:bg><p:bgPr>{background}<a:effectLst/></p:bgPr></p:bg><p:spTree>{GROUP}{"".join(shapes)}</p:spTree></p:cSld><p:clrMapOvr><a:masterClrMapping/></p:clrMapOvr></p:sld>'
         add(f"ppt/slides/slide{index}.xml", DECL + slide_xml, f"{CT_P}.slide+xml")
@@ -262,9 +263,13 @@ def build_pptx_parts(deck, base_dir=None):
     return parts
 
 
-def export_pptx(deck, output_path, base_dir=None) -> Path:
-    """Write an editable, reproducible PPTX with shapes, text, images and notes."""
-    parts = build_pptx_parts(deck, base_dir)
+def export_pptx(deck, output_path, base_dir=None, reflow=True) -> Path:
+    """Write an editable, reproducible PPTX with shapes, text, images and notes.
+
+    reflow=True leaves each paragraph whole so PowerPoint wraps (and re-wraps edited) text itself; reflow=False writes
+    the exact lines of the SVG and HTML exports, which PowerPoint then keeps as they are.
+    """
+    parts = build_pptx_parts(deck, base_dir, reflow)
     output = BytesIO()
     with zipfile.ZipFile(output, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
         for name, data in sorted(parts.items()):
